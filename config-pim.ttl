@@ -1,0 +1,37 @@
+# config-pim.ttl
+@prefix :      <#> .
+@prefix fuseki: <http://jena.apache.org/fuseki#> .
+@prefix ja:    <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix tdb2:  <http://jena.apache.org/2016/tdb#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+[] rdf:type fuseki:Server ;
+   fuseki:services (
+     :service1
+   ) .
+
+:service1 rdf:type fuseki:Service ;
+    fuseki:name "pim" ;            # URL path: /pim
+    fuseki:dataset :pimDataset ;
+    fuseki:serviceQuery "query" ;  # /pim/query
+    fuseki:serviceUpdate "update" ;# /pim/update
+    fuseki:serviceUpload "upload" ;# /pim/upload
+    fuseki:serviceReadWriteGraphStore "data" . # /pim/data
+
+:pimDataset rdf:type ja:RDFDataset ;
+    ja:defaultGraph [
+        rdf:type ja:MemoryModel ;
+        ja:content [ ja:externalContent
+          # Load all your TTL files here
+          <file:/absolute/path/to/pim_rdf_kb/base.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/tags.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/notes.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/tasks.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/projects.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/bookmarks.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/contacts.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/events.ttl> ,
+          <file:/absolute/path/to/pim_rdf_kb/shapes/notes-shapes.ttl>
+        ]
+    ] .
