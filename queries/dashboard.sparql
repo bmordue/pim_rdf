@@ -1,0 +1,11 @@
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX pim:     <https://ben.example/ns/pim#>
+
+SELECT ?part ?type ?title ?status
+WHERE {
+  <https://ben.example/pim/projects/kb> dcterms:hasPart ?part .
+  BIND (IF(EXISTS { ?part a pim:Task }, "Task", "Other") AS ?type)
+  OPTIONAL { ?part dcterms:title ?title }
+  OPTIONAL { ?part pim:status ?status }
+}
+

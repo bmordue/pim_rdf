@@ -1,0 +1,12 @@
+PREFIX pim: <https://ben.example/ns/pim#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+SELECT ?task ?title ?priority
+WHERE {
+  ?task a pim:Task ;
+        pim:status ?status ;
+        dcterms:title ?title ;
+        pim:priority ?priority .
+  FILTER(?status != "done")
+}
+ORDER BY ASC(?priority)
