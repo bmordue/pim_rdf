@@ -7,3 +7,15 @@
     :date "2025-09-15"^^xsd:date ;
     :location "London" ;
     :hasTag :tag-knowledge .
+
+:event-002 a :Event ;
+    dcterms:title "Team Meeting" ;
+    :date "2025-08-20T14:30:00Z"^^xsd:dateTime ;
+    :location "Office Conference Room" ;
+    :hasTag :tag-work .
+
+:event-003 a :Event ;
+    dcterms:title "Birthday Party" ;
+    :date "2025-10-05"^^xsd:date ;
+    :location "Home" ;
+    :hasTag :tag-personal .
