@@ -1,0 +1,6 @@
+@prefix : <https://ben.example/pim/> .
+
+:bookmark/001 a :Bookmark ;
+    rdfs:label "Apache Jena Fuseki" ;
+    :url <https://jena.apache.org/documentation/fuseki2/> ;
+    :hasTag :tag/knowledge .

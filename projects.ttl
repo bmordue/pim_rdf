@@ -1,0 +1,5 @@
+@prefix : <https://ben.example/pim/> .
+
+:project/001 a :Project ;
+    rdfs:label "RDF Personal Knowledge Base" ;
+    :hasTask :task/001 .
