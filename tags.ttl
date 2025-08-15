@@ -4,5 +4,5 @@
 :Tag a rdfs:Class ;
     rdfs:label "Tag" .
 
-:tag/knowledge a :Tag ;
+:tag_knowledge a :Tag ;
     rdfs:label "Knowledge" .
