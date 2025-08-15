@@ -1,0 +1,16 @@
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX : <https://ben.example/pim/>
+
+# Fuzzy text search for partial matches
+SELECT ?note ?title ?description ?score
+WHERE {
+  # Use wildcard and fuzzy matching
+  (?note ?score) text:query ("RDF*" 5) .
+  
+  ?note a :Note ;
+        dcterms:title ?title ;
+        dcterms:description ?description .
+}
+ORDER BY DESC(?score)
+LIMIT 10

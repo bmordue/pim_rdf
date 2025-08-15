@@ -98,11 +98,19 @@ build/
 
 - Merge your domain files into one graph (optional but convenient):
   - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
-- Serve with Fuseki:
-  - `fuseki-server --file=build/merged.ttl /pim`
+- Serve with Fuseki (with text search enabled):
+  - `fuseki-server --config=config-pim.ttl`
   - Open SPARQL UI at http://localhost:3030/pim
+  - The configuration includes Jena Text indexing for full-text search of note content
 
-4) Versioning and provenance
+4) Text Search
+
+- Text search is automatically enabled through the Fuseki configuration
+- Use `text:query` predicate in SPARQL queries to search note descriptions and titles
+- The text index supports Lucene query syntax including wildcards and fuzzy matching
+- See example queries in the `queries/` directory for text search patterns
+
+5) Versioning and provenance
 
 - Use Git commits as your change history.
 - Record imports/batch edits in `pim/provenance.ttl` using `prov:wasDerivedFrom`, `prov:generatedAtTime`, etc.
@@ -212,6 +220,62 @@ WHERE {
 }
 ```
 
+### Text Search with Jena Text
+
+The system includes full-text search capabilities for note content using Apache Jena Text with Lucene indexing. This allows efficient searching of note descriptions and titles.
+
+Basic text search:
+
+```sparql
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX : <https://ben.example/pim/>
+
+SELECT ?note ?title ?description ?score
+WHERE {
+  (?note ?score) text:query ("SPARQL" 10) .
+  ?note a :Note ;
+        dcterms:title ?title ;
+        dcterms:description ?description .
+}
+ORDER BY DESC(?score)
+```
+
+Field-specific search (search only in descriptions):
+
+```sparql
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX : <https://ben.example/pim/>
+
+SELECT ?note ?title ?description ?score
+WHERE {
+  (?note ?score) text:query (text:description "knowledge management") .
+  ?note a :Note ;
+        dcterms:title ?title ;
+        dcterms:description ?description .
+}
+ORDER BY DESC(?score)
+```
+
+Fuzzy/wildcard search:
+
+```sparql
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX : <https://ben.example/pim/>
+
+SELECT ?note ?title ?description ?score
+WHERE {
+  (?note ?score) text:query ("RDF*" 5) .
+  ?note a :Note ;
+        dcterms:title ?title ;
+        dcterms:description ?description .
+}
+ORDER BY DESC(?score)
+LIMIT 10
+```
+
 ## Conventions and best practices
 
 - One resource, one home file
@@ -225,7 +289,7 @@ WHERE {
 ## Roadmap (optional)
 
 - TriG named graphs for per-file graph boundaries.
-- Text search via Jena Text index for note bodies.
+- ✅ Text search via Jena Text index for note bodies.
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.

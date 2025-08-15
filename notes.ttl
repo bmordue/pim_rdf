@@ -4,5 +4,17 @@
 :note/001 a :Note ;
     dcterms:title "First RDF note" ;
     dcterms:creator :Ben ;
-    dcterms:description "This is a test note in the RDF knowledge base." ;
+    dcterms:description "This is a test note in the RDF knowledge base. It contains information about semantic web technologies, RDF graphs, and SPARQL queries. The note discusses how to model personal information using linked data principles." ;
+    :hasTag :tag/knowledge .
+
+:note/002 a :Note ;
+    dcterms:title "Jena Text Search Implementation" ;
+    dcterms:creator :Ben ;
+    dcterms:description "Notes on implementing full-text search using Apache Jena Text. This feature allows for efficient searching of note content using Lucene indexing. The implementation involves configuring TextDataset, EntityMap, and creating appropriate SPARQL queries with text:query predicates." ;
+    :hasTag :tag/knowledge .
+
+:note/003 a :Note ;
+    dcterms:title "SPARQL Query Patterns" ;
+    dcterms:creator :Ben ;
+    dcterms:description "Common SPARQL query patterns for knowledge management. Includes examples of filtering, sorting, and aggregating data. Useful patterns include OPTIONAL clauses, FILTER expressions, and property paths for traversing complex graph structures." ;
     :hasTag :tag/knowledge .

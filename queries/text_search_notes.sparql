@@ -1,0 +1,16 @@
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX : <https://ben.example/pim/>
+
+# Search for notes containing specific text in their description or title
+SELECT ?note ?title ?description ?score
+WHERE {
+  # Text search with scoring
+  (?note ?score) text:query ("SPARQL" 10) .
+  
+  # Get note details
+  ?note a :Note ;
+        dcterms:title ?title ;
+        dcterms:description ?description .
+}
+ORDER BY DESC(?score)
