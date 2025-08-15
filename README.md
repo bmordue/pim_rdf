@@ -222,11 +222,63 @@ WHERE {
 - Prefer `schema:` for content-oriented entities (notes as `schema:CreativeWork`, bookmarks as `schema:BookmarkAction`, etc.).
 - Keep dates as `xsd:dateTime` in UTC for consistent filtering.
 
+## Exports
+
+The repository includes tools to export your knowledge base to static formats for sharing or archiving:
+
+### Quick Export
+
+```bash
+# Export both HTML and JSON-LD (recommended)
+./export.sh
+
+# Or using Python directly
+python3 export.py --all
+```
+
+### Export Options
+
+```bash
+# Export only HTML
+python3 export.py --html --html-dir my_html_export
+
+# Export only JSON-LD  
+python3 export.py --json-ld --json-file my_export.jsonld
+
+# Specify data directory
+python3 export.py --data-dir /path/to/ttl/files --all
+```
+
+### Output
+
+**HTML Export** (`html_export/` directory):
+- `index.html` - Dashboard with open tasks by priority
+- `tasks.html` - All tasks with status, priority, assignments
+- `notes.html` - All notes with descriptions and metadata
+- `projects.html` - All projects with associated tasks
+- `style.css` - Clean, responsive styling
+
+**JSON-LD Export** (`export.jsonld` file):
+- Complete knowledge base in JSON-LD format
+- Includes proper @context for namespace handling
+- Export metadata with timestamp and triple count
+- Suitable for archiving or importing into other RDF tools
+
+### Viewing HTML Export
+
+```bash
+# Serve locally to view in browser
+python3 -m http.server 8000 --directory html_export
+# Then open http://localhost:8000 in your browser
+
+# Or simply open html_export/index.html in your browser
+```
+
 ## Roadmap (optional)
 
 - TriG named graphs for per-file graph boundaries.
 - Text search via Jena Text index for note bodies.
-- Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
+- ✅ **Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.**
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
 
