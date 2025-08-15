@@ -34,6 +34,10 @@ This repository is a blueprint for a personal knowledge base modeled in RDF and 
 
 A minimal vocabulary to cover gaps. You can evolve or replace parts of this with schema.org or ActivityStreams 2.0 as needed.
 
+> **📋 Task Model Update**: Based on vocabulary evaluation (see [TASK_MODEL_EVALUATION.md](TASK_MODEL_EVALUATION.md)), 
+> **schema.org Action** is recommended over the custom `pim:Task` model for improved interoperability. 
+> See `examples/` for migration examples and updated queries.
+
 ```turtle
 @prefix pim: <https://ben.example/ns/pim#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -222,13 +226,31 @@ WHERE {
 - Prefer `schema:` for content-oriented entities (notes as `schema:CreativeWork`, bookmarks as `schema:BookmarkAction`, etc.).
 - Keep dates as `xsd:dateTime` in UTC for consistent filtering.
 
+## Task Model Vocabulary Evaluation
+
+**Status: ✅ COMPLETED** - See [TASK_MODEL_EVALUATION.md](TASK_MODEL_EVALUATION.md) for comprehensive analysis.
+
+**Recommendation**: Migrate to **schema.org Action** vocabulary for improved interoperability and semantic richness.
+
+### Key Findings
+- **schema.org Action** provides optimal balance of compatibility, expressiveness, and ecosystem support
+- **ActivityStreams 2.0** less suitable for personal task management use cases
+- Migration path: Hybrid approach allowing gradual transition while preserving custom PIM properties
+
+### Migration Examples
+See `examples/` directory for:
+- Current vs. migrated task examples
+- Updated SPARQL queries
+- Enhanced SHACL validation shapes
+- Hybrid approach for gradual migration
+
 ## Roadmap (optional)
 
 - TriG named graphs for per-file graph boundaries.
 - Text search via Jena Text index for note bodies.
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
-- Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
+- ~~Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.~~ ✅ **COMPLETED**
 
 ## License
 
