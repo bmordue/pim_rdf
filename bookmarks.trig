@@ -1,0 +1,9 @@
+@prefix : <https://ben.example/pim/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://ben.example/pim/graph/bookmarks> {
+    <https://ben.example/pim/bookmark/001> a :Bookmark ;
+        rdfs:label "Apache Jena Fuseki" ;
+        :url <https://jena.apache.org/documentation/fuseki2/> ;
+        :hasTag <https://ben.example/pim/tag/knowledge> .
+}

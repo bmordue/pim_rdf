@@ -1,0 +1,9 @@
+@prefix : <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://ben.example/pim/graph/tasks> {
+    <https://ben.example/pim/task/001> a :Task ;
+        dcterms:title "Finish RDF PIM design" ;
+        :assignedTo :Ben ;
+        :hasTag <https://ben.example/pim/tag/knowledge> .
+}

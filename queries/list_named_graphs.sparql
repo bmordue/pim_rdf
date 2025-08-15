@@ -1,0 +1,13 @@
+# Query all graphs and their triple counts
+# This demonstrates the per-file graph boundaries
+
+PREFIX : <https://ben.example/pim/>
+
+SELECT ?graph (COUNT(*) as ?tripleCount)
+WHERE {
+  GRAPH ?graph {
+    ?s ?p ?o .
+  }
+}
+GROUP BY ?graph
+ORDER BY ?graph
