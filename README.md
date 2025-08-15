@@ -80,6 +80,26 @@ build/
   - Example: `https://ben.example/pim/task/2025-08-14-abc123`
 - Give anything you may reference later a URI; avoid blank nodes for primary entities.
 
+## TriG Named Graphs (NEW)
+
+This implementation now supports TriG format with named graphs for clear per-file graph boundaries. Each domain file is wrapped in its own named graph:
+
+- `<https://ben.example/pim/graph/base>` - Base metadata and prefixes
+- `<https://ben.example/pim/graph/notes>` - Notes domain
+- `<https://ben.example/pim/graph/tasks>` - Tasks domain  
+- `<https://ben.example/pim/graph/contacts>` - Contacts domain
+- `<https://ben.example/pim/graph/projects>` - Projects domain
+- `<https://ben.example/pim/graph/bookmarks>` - Bookmarks domain
+- `<https://ben.example/pim/graph/events>` - Events domain
+- `<https://ben.example/pim/graph/tags>` - Tags and taxonomy
+
+### Benefits:
+- **Domain isolation**: Query specific domains without interference from others
+- **Modular validation**: Validate individual graphs separately
+- **Clear boundaries**: Each file maps to exactly one named graph
+- **Cross-graph queries**: Query across domains while maintaining provenance
+- **Data management**: Easy to understand where data originates
+
 ## Getting started
 
 1) Authoring
@@ -96,11 +116,22 @@ build/
 
 3) Querying locally
 
-- Merge your domain files into one graph (optional but convenient):
-  - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
-- Serve with Fuseki:
-  - `fuseki-server --file=build/merged.ttl /pim`
-  - Open SPARQL UI at http://localhost:3030/pim
+- **Option A: Turtle files (traditional approach)**
+  - Merge your domain files into one graph (optional but convenient):
+    - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
+  - Serve with Fuseki:
+    - `fuseki-server --file=build/merged.ttl /pim`
+    - Open SPARQL UI at http://localhost:3030/pim
+
+- **Option B: TriG named graphs (recommended for modular queries)**
+  - Build the merged TriG dataset with per-file graph boundaries:
+    - `python3 build_trig.py`
+  - Serve with Fuseki using TriG configuration:
+    - `fuseki-server --config=config-pim-trig.ttl`
+    - Open SPARQL UI at http://localhost:3030/pim
+  - Query specific domains: `GRAPH <https://ben.example/pim/graph/notes> { ... }`
+  - Query across all graphs while maintaining boundaries
+  - See `queries/` directory for examples of named graph queries
 
 4) Versioning and provenance
 
@@ -224,7 +255,7 @@ WHERE {
 
 ## Roadmap (optional)
 
-- TriG named graphs for per-file graph boundaries.
+- ✅ **TriG named graphs for per-file graph boundaries** - **IMPLEMENTED**: Each domain file (notes, tasks, contacts, etc.) is wrapped in its own named graph for clear modularization and isolation.
 - Text search via Jena Text index for note bodies.
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.

@@ -4,5 +4,5 @@
 :Tag a rdfs:Class ;
     rdfs:label "Tag" .
 
-:tag/knowledge a :Tag ;
+<https://ben.example/pim/tag/knowledge> a :Tag ;
     rdfs:label "Knowledge" .

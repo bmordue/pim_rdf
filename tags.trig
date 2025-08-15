@@ -1,0 +1,10 @@
+@prefix : <https://ben.example/pim/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://ben.example/pim/graph/tags> {
+    :Tag a rdfs:Class ;
+        rdfs:label "Tag" .
+
+    <https://ben.example/pim/tag/knowledge> a :Tag ;
+        rdfs:label "Knowledge" .
+}

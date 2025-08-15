@@ -1,0 +1,15 @@
+# Cross-graph query: Find all entities tagged with knowledge
+# This demonstrates querying across multiple graphs while maintaining boundaries
+
+PREFIX : <https://ben.example/pim/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?graph ?entity ?label ?type
+WHERE {
+  GRAPH ?graph {
+    ?entity :hasTag <https://ben.example/pim/tag/knowledge> ;
+            a ?type .
+    OPTIONAL { ?entity rdfs:label ?label }
+  }
+}
+ORDER BY ?graph

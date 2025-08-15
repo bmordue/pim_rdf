@@ -1,0 +1,10 @@
+@prefix : <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://ben.example/pim/graph/events> {
+    <https://ben.example/pim/event/001> a :Event ;
+        dcterms:title "RDF Workshop" ;
+        :date "2025-09-15" ;
+        :location "London" ;
+        :hasTag <https://ben.example/pim/tag/knowledge> .
+}

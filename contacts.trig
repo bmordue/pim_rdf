@@ -1,0 +1,9 @@
+@prefix : <https://ben.example/pim/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://ben.example/pim/graph/contacts> {
+    <https://ben.example/pim/contact/001> a :Person ;
+        rdfs:label "Jane Doe" ;
+        :email "jane@example.com" ;
+        :hasTag <https://ben.example/pim/tag/knowledge> .
+}

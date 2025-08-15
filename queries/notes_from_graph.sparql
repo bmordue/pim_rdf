@@ -1,0 +1,14 @@
+# Query notes from the notes graph only
+# This demonstrates querying a specific domain graph
+
+PREFIX : <https://ben.example/pim/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+SELECT ?note ?title ?description
+WHERE {
+  GRAPH <https://ben.example/pim/graph/notes> {
+    ?note a :Note ;
+          dcterms:title ?title ;
+          dcterms:description ?description .
+  }
+}
