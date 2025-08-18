@@ -1,6 +1,9 @@
 @prefix : <https://ben.example/pim/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-:contact/001 a :Person ;
+:contact-001 a foaf:Person ;
     rdfs:label "Jane Doe" ;
-    :email "jane@example.com" ;
-    :hasTag :tag/knowledge .
+    foaf:mbox <mailto:jane@example.com> ;
+    :hasTag :tag-knowledge .

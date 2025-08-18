@@ -1,8 +1,10 @@
 @prefix : <https://ben.example/pim/> .
+@prefix ical: <http://www.w3.org/2002/12/cal/ical#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:event/001 a :Event ;
+:event-001 a ical:Vevent ;
     dcterms:title "RDF Workshop" ;
-    :date "2025-09-15" ;
-    :location "London" ;
-    :hasTag :tag/knowledge .
+    ical:dtstart "2025-09-15T09:00:00Z"^^xsd:dateTime ;
+    ical:location "London" ;
+    :hasTag :tag-knowledge .
