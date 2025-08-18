@@ -32,13 +32,6 @@
     :hasTag :tag-knowledge ;
     schema:text "This is a test note in the RDF knowledge base." .
 
-:note-002 a schema:CreativeWork ;
-    dcterms:created "2025-01-27T16:00:00+00:00"^^xsd:dateTime ;
-    dcterms:creator :Ben ;
-    dcterms:title "Testing Copilot Instructions" ;
-    :hasTag :tag-testing ;
-    schema:text "This note was added to test the complete validation workflow." .
-
 :project-001 a pim:Project ;
     dcterms:description "A personal knowledge management system using RDF and SPARQL" ;
     dcterms:title "RDF Personal Knowledge Base" .
