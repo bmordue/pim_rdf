@@ -230,6 +230,12 @@ WHERE {
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
 
+## Quick Start
+
+1. Install dependencies: `pip3 install rdflib pyshacl`
+2. Validate repository: `python3 validate_pim.py`
+3. For detailed developer instructions: See `.github/copilot-instructions.md`
+
 ## License
 
 No license specified yet. Consider adding a LICENSE file (e.g., MIT, Apache-2.0) to clarify usage.
