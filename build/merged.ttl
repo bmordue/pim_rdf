@@ -1,0 +1,58 @@
+@prefix : <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ical: <http://www.w3.org/2002/12/cal/ical#> .
+@prefix pim: <https://ben.example/ns/pim#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:bookmark-001 a schema:BookmarkAction ;
+    dcterms:description "SPARQL server documentation" ;
+    dcterms:title "Apache Jena Fuseki" ;
+    :hasTag :tag-knowledge ;
+    schema:target <https://jena.apache.org/documentation/fuseki2/> .
+
+:contact-001 a foaf:Person ;
+    rdfs:label "Jane Doe" ;
+    foaf:mbox <mailto:jane@example.com> ;
+    :hasTag :tag-knowledge .
+
+:event-001 a ical:Vevent ;
+    dcterms:title "RDF Workshop" ;
+    ical:dtstart "2025-09-15T09:00:00+00:00"^^xsd:dateTime ;
+    ical:location "London" ;
+    :hasTag :tag-knowledge .
+
+:note-001 a schema:CreativeWork ;
+    dcterms:created "2025-08-18T14:00:00+00:00"^^xsd:dateTime ;
+    dcterms:creator :Ben ;
+    dcterms:title "First RDF note" ;
+    :hasTag :tag-knowledge ;
+    schema:text "This is a test note in the RDF knowledge base." .
+
+:project-001 a pim:Project ;
+    dcterms:description "A personal knowledge management system using RDF and SPARQL" ;
+    dcterms:title "RDF Personal Knowledge Base" .
+
+:task-001 a pim:Task ;
+    dcterms:created "2025-08-18T14:30:00+00:00"^^xsd:dateTime ;
+    dcterms:title "Finish RDF PIM design" ;
+    pim:assignedTo :Ben ;
+    pim:priority 2 ;
+    pim:status "todo" .
+
+:TagScheme a skos:ConceptScheme ;
+    dcterms:description "Tags for organizing personal knowledge" ;
+    dcterms:title "Personal Tags" .
+
+:Ben a :Person ;
+    rdfs:label "Ben Mordue" ;
+    :email "ben@example.com" .
+
+:tag-knowledge a skos:Concept ;
+    skos:definition "Items related to knowledge management and learning" ;
+    skos:inScheme :TagScheme ;
+    skos:prefLabel "Knowledge" .
+

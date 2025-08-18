@@ -1,7 +1,11 @@
 @prefix : <https://ben.example/pim/> .
+@prefix pim: <https://ben.example/ns/pim#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:task/001 a :Task ;
+:task-001 a pim:Task ;
     dcterms:title "Finish RDF PIM design" ;
-    :assignedTo :Ben ;
-    :hasTag :tag/knowledge .
+    dcterms:created "2025-08-18T14:30:00Z"^^xsd:dateTime ;
+    pim:status "todo" ;
+    pim:priority 2 ;
+    pim:assignedTo :Ben .

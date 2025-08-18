@@ -1,8 +1,14 @@
 @prefix : <https://ben.example/pim/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-:Tag a rdfs:Class ;
-    rdfs:label "Tag" .
+# Tag concept scheme
+:TagScheme a skos:ConceptScheme ;
+    dcterms:title "Personal Tags" ;
+    dcterms:description "Tags for organizing personal knowledge" .
 
-:tag/knowledge a :Tag ;
-    rdfs:label "Knowledge" .
+:tag-knowledge a skos:Concept ;
+    skos:inScheme :TagScheme ;
+    skos:prefLabel "Knowledge" ;
+    skos:definition "Items related to knowledge management and learning" .
