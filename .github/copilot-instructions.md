@@ -4,11 +4,20 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 
 **Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
+## Quick Start for New Developers
+
+**Essential first steps after cloning:**
+1. `pip3 install rdflib pyshacl` -- Install dependencies (~4 seconds)
+2. `python3 validate_pim.py` -- Validate entire repository (~270ms)
+3. Explore the data: `python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); results=g.query('SELECT ?type (COUNT(?e) as ?count) WHERE { ?e a ?type } GROUP BY ?type'); [print(f'{str(row[0]).split(\"/\")[-1]}: {row[1]} entities') for row in results]"`
+
+**Repository contains 10 TTL files (~72 triples) modeling personal knowledge with RDF.**
+
 ## Working Effectively
 
 ### Essential Setup and Dependencies
 - Install Python 3.12+ and pip: `sudo apt-get update && sudo apt-get install -y python3 python3-pip`
-- Install required Python packages: `pip3 install rdflib pyshacl` -- takes 30-60 seconds. NEVER CANCEL.
+- Install required Python packages: `pip3 install rdflib pyshacl` -- takes 3-5 seconds. NEVER CANCEL.
 - The repository uses Python-based RDF tools instead of Apache Jena due to network limitations in CI environments.
 
 ### Core Validation Workflow
@@ -24,10 +33,10 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 - **Validation time: ~1ms per file. Total repository validation: ~10ms for 10 files.**
 
 ### Building and Testing
-- **Validate all TTL files:** `python3 validate_pim.py` -- takes 100-200ms. NEVER CANCEL.
-- **Merge data files:** Creates `build/merged.ttl` with combined RDF graph (~40 triples) -- takes 5-10ms.
-- **SPARQL query testing:** Automated tests run 3 sample queries -- takes 100ms total.
-- **SHACL validation:** Tests data against shape constraints -- takes 1ms per validation.
+- **Validate all TTL files:** `python3 validate_pim.py` -- takes 500-600ms. NEVER CANCEL.
+- **Merge data files:** Creates `build/merged.ttl` with combined RDF graph (~40 triples) -- takes 6-10ms.
+- **SPARQL query testing:** Automated tests run 3 sample queries -- takes 100-300ms total.
+- **SHACL validation:** Tests data against shape constraints -- takes 0.6ms per validation.
 
 ### Manual Testing and Validation
 - **ALWAYS run complete validation after making changes:** `python3 validate_pim.py`
@@ -40,6 +49,20 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
   results = g.query('SELECT ?s ?p ?o WHERE { ?s ?p ?o } LIMIT 5')
   for row in results: print(row)
   ```
+
+### Functional Testing Scenarios
+**ALWAYS test these scenarios after making changes:**
+1. **Add a new entity** (note, task, contact) and validate it appears in queries
+2. **Test SPARQL queries** on the merged dataset to ensure data relationships work
+3. **Run end-to-end workflow:** Edit TTL → validate syntax → merge → query
+4. **Verify entity types and counts:**
+   ```python
+   import rdflib
+   g = rdflib.Graph()
+   g.parse('build/merged.ttl', format='turtle')
+   results = g.query('SELECT ?type (COUNT(?e) as ?count) WHERE { ?e a ?type } GROUP BY ?type')
+   for row in results: print(f'{row[0]}: {row[1]} entities')
+   ```
 
 ## Repository Structure
 
@@ -117,8 +140,16 @@ ORDER BY ASC(?priority)
 
 ### Query Testing
 - **Load merged graph:** `g.parse('build/merged.ttl', format='turtle')`
-- **Query execution time:** Typically 1-100ms depending on complexity
+- **Query execution time:** Typically 3-300ms (simple queries ~3ms, complex first queries ~300ms)
 - **Always test queries on merged.ttl:** Contains complete dataset (~40 triples)
+- **Sample queries available:** Test with files in `queries/` directory:
+  - `open_tasks_by_priority.sparql` - Lists incomplete tasks by priority
+  - `notes_tagged_rdf_last_30_days.sparql` - Recent notes with RDF tag
+  - `dashboard.sparql` - Project dashboard with tasks and status
+- **Test sample query:** 
+  ```bash
+  python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); results=g.query(open('queries/open_tasks_by_priority.sparql').read()); [print(row) for row in results]"
+  ```
 
 ## SHACL Validation
 
@@ -135,9 +166,9 @@ ORDER BY ASC(?priority)
   ```
 
 ### Validation Timing
-- **Per-file SHACL validation:** ~1ms
-- **Full repository validation:** ~10ms total
-- **NEVER CANCEL:** All validations complete in under 1 second
+- **Per-file SHACL validation:** ~0.6ms
+- **Full repository validation:** ~11ms for TTL syntax validation
+- **NEVER CANCEL:** All validations complete in under 1 second (total ~600ms)
 
 ## Common Tasks
 
@@ -154,11 +185,11 @@ ORDER BY ASC(?priority)
 - **Query failures:** Verify entity types and property names match vocabulary
 
 ### Performance Expectations
-- **TTL file parsing:** 1-3ms per file
-- **Data merging:** 5-10ms for full repository
-- **SPARQL queries:** 1-100ms depending on complexity
-- **SHACL validation:** 1ms per shape/data pair
-- **Complete validation workflow:** 100-200ms total
+- **TTL file parsing:** 0.5-3ms per file
+- **Data merging:** 5-6ms for full repository (~40 triples)
+- **SPARQL queries:** 3-300ms depending on complexity (simple queries ~3ms, first query ~300ms)
+- **SHACL validation:** 0.6ms per shape/data pair
+- **Complete validation workflow:** 250-600ms total (typically ~270ms)
 
 ## Validation Commands Reference
 
@@ -183,9 +214,31 @@ python3 -c "import pyshacl, rdflib; d=rdflib.Graph(); d.parse('notes.ttl', forma
 - **Use consistent vocabulary:** Follow the patterns in existing files
 - **Validate before committing:** Run `python3 validate_pim.py` always
 
+## Troubleshooting Common Issues
+
+### Syntax Errors
+- **Missing prefix error:** Add missing prefix declaration at top of TTL file
+- **Invalid URI:** Check for special characters in local names (use dashes, not slashes)
+- **Missing datatype:** Add `^^xsd:dateTime` for timestamps, `^^xsd:integer` for numbers
+
+### SHACL Validation Failures
+- **Check shapes directory:** Ensure `shapes/notes-shapes.ttl` exists and is valid
+- **Verify data structure:** Ensure notes have required properties (`dcterms:title`, `schema:text`)
+
+### Query Failures
+- **Empty results:** Verify entity types match expected vocabularies (`pim:Task`, `schema:CreativeWork`)
+- **Performance issues:** First query may take ~300ms, subsequent queries ~3ms (caching)
+
+### Environment Issues
+- **Import errors:** Re-run `pip3 install rdflib pyshacl` if modules not found
+- **File not found:** Ensure you're in repository root directory `/home/runner/work/pim_rdf/pim_rdf`
+
 ## Alternative Setup (Advanced)
 - **Nix environment:** `nix-shell` loads Apache Jena and Fuseki (if network allows)
 - **Apache Jena tools:** `riot --validate file.ttl`, `shacl validate --shapes shapes.ttl --data data.ttl`
-- **Fuseki server:** `fuseki-server --file=build/merged.ttl /pim` (for local SPARQL endpoint)
+- **Fuseki server options:**
+  - Simple: `fuseki-server --file=build/merged.ttl /pim` (for local SPARQL endpoint)
+  - Advanced: `fuseki-server --config=config-pim.ttl` (uses repository configuration)
+- **Fuseki UI:** Available at http://localhost:3030/pim when server is running
 
-**Note:** Python-based tools are recommended for CI/network-constrained environments due to reliable installation.
+**Note:** Python-based tools are recommended for CI/network-constrained environments due to reliable installation. Apache Jena tools require network access and may not be available in all environments.
