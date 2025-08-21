@@ -265,6 +265,23 @@ The script automatically maps RDF event properties to ICS format:
 - ✅ ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
 
+## Quick Start
+
+1. Install dependencies: `pip3 install rdflib pyshacl`
+2. Validate repository: `python3 validate_pim.py`
+3. For detailed developer instructions: See `.github/copilot-instructions.md`
+
+## Continuous Integration
+
+The repository includes a GitHub Actions workflow that automatically validates all changes:
+
+- **Triggers**: Pull requests and pushes to main branch
+- **Validation includes**: TTL syntax checking, SHACL shapes validation, SPARQL query testing
+- **Files monitored**: `*.ttl`, `shapes/**`, `validate_pim.py`, workflow config
+- **Dependencies**: Automatically installs `rdflib` and `pyshacl`
+
+The CI pipeline runs the same `validate_pim.py` script used for local development, ensuring consistency between local and remote validation.
+
 ## License
 
 No license specified yet. Consider adding a LICENSE file (e.g., MIT, Apache-2.0) to clarify usage.
