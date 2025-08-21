@@ -12,7 +12,7 @@ pkgs.mkShell {
     pkgs.librdf_raptor2  # gives 'rapper'
 
     # Python RDF libraries
-    (pkgs.python3.withPackages (ps: with ps; [ rdflib ]))
+    (pkgs.python3.withPackages (ps: with ps; [ rdflib pyshacl ]))
   ];
 
   shellHook = ''
