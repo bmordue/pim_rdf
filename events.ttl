@@ -4,20 +4,20 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
-:event-001 a Event ;
+:event-001 a ical:Vevent ;
     dcterms:title "RDF Workshop" ;
-    :date "2025-09-15"^^xsd:date ;
-    :location "London" ;
+    ical:dtstart "2025-09-15"^^xsd:date ;
+    ical:location "London" ;
     :hasTag :tag-knowledge .
 
-:event-002 a Event ;
+:event-002 a ical:Vevent ;
     dcterms:title "Team Meeting" ;
-    :date "2025-08-20T14:30:00Z"^^xsd:dateTime ;
-    :location "Office Conference Room" ;
+    ical:dtstart "2025-08-20T14:30:00Z"^^xsd:dateTime ;
+    ical:location "Office Conference Room" ;
     :hasTag :tag-work .
 
-:event-003 a Event ;
+:event-003 a ical:Vevent ;
     dcterms:title "Birthday Party" ;
-    :date "2025-10-05"^^xsd:date ;
-    :location "Home" ;
+    ical:dtstart "2025-10-05"^^xsd:date ;
+    ical:location "Home" ;
     :hasTag :tag-personal .
