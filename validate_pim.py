@@ -16,7 +16,40 @@ import pyshacl
 import os
 import sys
 import time
+import yaml
 from pathlib import Path
+
+def load_domains_config(directory):
+    """Load data domains configuration from YAML file"""
+    config_path = os.path.join(directory, 'config', 'domains.yaml')
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+                return [domain['filename'] for domain in config.get('domains', [])]
+        except Exception as e:
+            print(f"⚠ Error loading domains config: {e}")
+    
+    # Fallback to hardcoded list if config file doesn't exist
+    print("⚠ Using fallback hardcoded domain list")
+    return ['base.ttl', 'tasks.ttl', 'notes.ttl', 'contacts.ttl', 
+            'projects.ttl', 'bookmarks.ttl', 'events.ttl', 'tags.ttl']
+
+def load_validation_config(directory):
+    """Load validation configuration from YAML file"""
+    config_path = os.path.join(directory, 'config', 'validation.yaml')
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+                return {item['data_file']: item['shape_file'] 
+                       for item in config.get('validation', [])}
+        except Exception as e:
+            print(f"⚠ Error loading validation config: {e}")
+    
+    # Fallback to hardcoded mapping if config file doesn't exist
+    print("⚠ Using fallback hardcoded validation mapping")
+    return {'notes.ttl': 'notes-shapes.ttl'}
 
 def validate_ttl_files(directory):
     """Validate all TTL files for proper Turtle syntax"""
@@ -53,9 +86,8 @@ def merge_data_files(directory):
     """Merge TTL data files into a single graph"""
     print("\n=== Data Merging ===")
     
-    # Core data files (exclude config and shapes)
-    data_files = ['base.ttl', 'tasks.ttl', 'notes.ttl', 'contacts.ttl', 
-                  'projects.ttl', 'bookmarks.ttl', 'events.ttl', 'tags.ttl']
+    # Load data files from configuration
+    data_files = load_domains_config(directory)
     
     start_time = time.time()
     merged_graph = rdflib.Graph()
@@ -145,9 +177,8 @@ def validate_shacl_shapes(directory):
         print("No shapes directory found - skipping SHACL validation")
         return True
     
-    data_files = {
-        'notes.ttl': 'notes-shapes.ttl'
-    }
+    # Load validation mappings from configuration
+    data_files = load_validation_config(directory)
     
     all_valid = True
     
