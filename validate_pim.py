@@ -82,41 +82,39 @@ def merge_data_files(directory):
     
     return merged_graph
 
-def test_sparql_queries(graph):
+def load_query_from_file(query_path):
+    """Load a SPARQL query from a file"""
+    try:
+        with open(query_path, 'r', encoding='utf-8') as f:
+            return f.read().strip()
+    except Exception as e:
+        print(f"✗ Error loading query from {query_path}: {e}")
+        return None
+
+def test_sparql_queries(graph, directory='.'):
     """Test SPARQL queries on the merged data"""
     print("\n=== SPARQL Query Testing ===")
     
-    queries = [
-        ("List all tasks", """
-PREFIX pim: <https://ben.example/ns/pim#>
-PREFIX dcterms: <http://purl.org/dc/terms/>
-SELECT ?task ?title ?status ?priority
-WHERE {
-  ?task a pim:Task ;
-        dcterms:title ?title ;
-        pim:status ?status ;
-        pim:priority ?priority .
-}
-ORDER BY ASC(?priority)
-"""),
-        ("List all schema.org CreativeWorks", """
-PREFIX schema: <https://schema.org/>
-PREFIX dcterms: <http://purl.org/dc/terms/>
-SELECT ?work ?title
-WHERE {
-  ?work a schema:CreativeWork ;
-        dcterms:title ?title .
-}
-"""),
-        ("Count entities by type", """
-SELECT ?type (COUNT(?entity) as ?count)
-WHERE {
-  ?entity a ?type .
-}
-GROUP BY ?type
-ORDER BY DESC(?count)
-""")
+    # Load queries from external files
+    queries_dir = os.path.join(directory, 'queries', 'validation')
+    query_files = [
+        ("List all tasks", "list-tasks.sparql"),
+        ("List all schema.org CreativeWorks", "list-creativeworks.sparql"),
+        ("Count entities by type", "count-by-type.sparql")
     ]
+    
+    queries = []
+    for name, filename in query_files:
+        query_path = os.path.join(queries_dir, filename)
+        query_text = load_query_from_file(query_path)
+        if query_text:
+            queries.append((name, query_text))
+        else:
+            print(f"⚠ Skipping query '{name}' - file not found or error loading")
+    
+    if not queries:
+        print("⚠ No validation queries found - skipping SPARQL testing")
+        return
     
     for name, query in queries:
         print(f"\n--- {name} ---")
@@ -213,7 +211,7 @@ def main():
         sys.exit(1)
     
     # Step 3: Test SPARQL queries
-    test_sparql_queries(merged_graph)
+    test_sparql_queries(merged_graph, directory)
     
     # Step 4: SHACL validation
     if not validate_shacl_shapes(directory):

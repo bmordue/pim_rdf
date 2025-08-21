@@ -1,0 +1,6 @@
+SELECT ?type (COUNT(?entity) as ?count)
+WHERE {
+  ?entity a ?type .
+}
+GROUP BY ?type
+ORDER BY DESC(?count)
