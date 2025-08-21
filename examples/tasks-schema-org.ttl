@@ -1,0 +1,76 @@
+# Schema.org Action Migration Examples
+
+@prefix :       <https://ben.example/pim/> .
+@prefix schema: <https://schema.org/> .
+@prefix pim:    <https://ben.example/ns/pim#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+# Example 1: Simple todo task migrated to schema.org
+:task-2025-08-15-001
+  a schema:Action ;
+  schema:name "Review RDF vocabulary options" ;
+  schema:description "Evaluate schema.org Action vs ActivityStreams 2.0 for task modeling" ;
+  schema:actionStatus schema:PotentialActionStatus ;
+  schema:agent :Ben ;
+  dcterms:created "2025-08-15T09:00:00Z"^^xsd:dateTime ;
+  pim:priority 3 ;
+  pim:inbox true .
+
+# Example 2: Project task with dependencies and timing
+:task-2025-08-15-002
+  a schema:Action ;
+  schema:name "Implement schema.org migration" ;
+  schema:description "Migrate existing PIM task model to use schema.org Action vocabulary" ;
+  schema:actionStatus schema:ActiveActionStatus ;
+  schema:agent :Ben ;
+  schema:isPartOf :project-2025-07-website ;
+  schema:duration "PT4H"^^xsd:duration ;
+  schema:prerequisite :task-2025-08-15-001 ;
+  schema:startTime "2025-08-15T10:00:00Z"^^xsd:dateTime ;
+  dcterms:created "2025-08-15T09:30:00Z"^^xsd:dateTime ;
+  pim:priority 1 ;
+  pim:inbox false .
+
+# Example 3: Completed task with results
+:task-2025-08-14-003
+  a schema:Action ;
+  schema:name "Research ActivityStreams 2.0" ;
+  schema:description "Investigate ActivityStreams 2.0 vocabulary for task management use cases" ;
+  schema:actionStatus schema:CompletedActionStatus ;
+  schema:agent :Ben ;
+  schema:isPartOf :project-2025-07-website ;
+  schema:startTime "2025-08-14T15:00:00Z"^^xsd:dateTime ;
+  schema:endTime "2025-08-15T10:00:00Z"^^xsd:dateTime ;
+  schema:result "ActivityStreams 2.0 less suitable for task management than schema.org Action" ;
+  dcterms:created "2025-08-14T15:00:00Z"^^xsd:dateTime ;
+  dcterms:modified "2025-08-15T10:00:00Z"^^xsd:dateTime ;
+  pim:priority 2 ;
+  pim:inbox false .
+
+# Example 4: High priority urgent task with error handling
+:task-2025-08-15-004
+  a schema:Action ;
+  schema:name "Fix critical RDF parsing bug" ;
+  schema:description "Address turtle syntax error causing validation failures" ;
+  schema:actionStatus schema:PotentialActionStatus ;
+  schema:agent :Ben ;
+  schema:duration "PT30M"^^xsd:duration ;
+  schema:error "RDF parsing fails on malformed turtle syntax in tasks.ttl" ;
+  dcterms:created "2025-08-15T11:00:00Z"^^xsd:dateTime ;
+  pim:priority 0 ;  # Highest priority (retained custom property)
+  pim:inbox true .
+
+# Example 5: Collaborative task with multiple agents
+:task-2025-08-15-005
+  a schema:Action ;
+  schema:name "Review task model evaluation document" ;
+  schema:description "Peer review of schema.org vs ActivityStreams evaluation" ;
+  schema:actionStatus schema:PotentialActionStatus ;
+  schema:agent :Ben ;
+  schema:participant :Reviewer1, :Reviewer2 ;
+  schema:isPartOf :project-2025-07-website ;
+  schema:duration "PT1H"^^xsd:duration ;
+  dcterms:created "2025-08-15T12:00:00Z"^^xsd:dateTime ;
+  pim:priority 2 ;
+  pim:inbox true .
