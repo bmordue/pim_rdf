@@ -73,6 +73,35 @@ build/
   merged.ttl            # generated: merged graph for serving/querying
 ```
 
+### Configuration-Driven Approach
+
+The project now uses configuration files to separate data definitions from application logic:
+
+- **`config/domains.yaml`**: Defines which TTL files should be included in data merging. Adding new domains just requires updating this file.
+- **`config/validation.yaml`**: Maps data files to their SHACL shape files for validation.
+- **`queries/validation/`**: External SPARQL query files used by the validation script.
+
+This approach allows extending the system without modifying Python code.
+
+**Updated project structure:**
+```text
+pim/
+  # ... existing TTL files ...
+  config/               # NEW: configuration-driven setup
+    domains.yaml        # defines which TTL files to merge
+    validation.yaml     # SHACL validation mappings
+  queries/              # UPDATED: organized by purpose
+    user/               # user-defined queries (moved from queries/)
+      dashboard.sparql
+      notes_tagged_rdf_last_30_days.sparql
+      open_tasks_by_priority.sparql
+    validation/         # NEW: queries used by validation script
+      list-tasks.sparql
+      list-creativeworks.sparql
+      count-by-type.sparql
+  # ... rest remains the same ...
+```
+
 ## URI conventions
 
 - Keep URIs stable and preferably opaque; avoid encoding titles into them.
