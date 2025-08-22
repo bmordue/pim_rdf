@@ -3,16 +3,19 @@
 pkgs.mkShell {
   name = "rdf-pim-env";
 
-  buildInputs = [
+  buildInputs = with pkgs; [
     # Apache Jena + Fuseki
-    pkgs.apache-jena
-    pkgs.apache-jena-fuseki
+    apache-jena
+    apache-jena-fuseki
 
     # RDF syntax tools
-    pkgs.librdf_raptor2  # gives 'rapper'
+    librdf_raptor2  # gives 'rapper'
 
     # Python RDF libraries
-    (pkgs.python3.withPackages (ps: with ps; [ rdflib pyshacl ]))
+    (python3.withPackages (ps: with ps; [ rdflib ]))
+
+    gemini-cli
+    claude-code
   ];
 
   shellHook = ''
