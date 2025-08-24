@@ -1,0 +1,29 @@
+# Build artifacts
+build/
+
+# Fuseki runtime files
+TDB/
+TDB2/
+
+# Text index files
+*.idx
+*.tii
+*.tis
+*.frq
+*.prx
+*.nrm
+*.fnm
+*.fdx
+*.fdt
+lucene-*
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor specific
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
