@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Start script for PIM RDF Web Interface
 #
 # This script helps start both the Fuseki server and web interface.
