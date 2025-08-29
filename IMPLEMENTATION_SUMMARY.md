@@ -5,7 +5,7 @@ This document summarizes the implementation of data/logic separation as outlined
 ## What Was Implemented
 
 ### Phase 1: Query Externalization ✅
-- **Extracted embedded queries** from `validate_pim.py` to external `.sparql` files
+- **Extracted embedded queries** from `validate_pim.sh` to external `.sparql` files
 - **Created query organization**:
   - `queries/validation/` - queries used by validation script
   - `queries/user/` - user-defined queries (moved from root `queries/`)
@@ -34,14 +34,14 @@ queries/
 │   ├── dashboard.sparql
 │   ├── notes_tagged_rdf_last_30_days.sparql
 │   └── open_tasks_by_priority.sparql
-└── validation/           # NEW: Extracted from validate_pim.py
+└── validation/           # NEW: Extracted from validate_pim.sh
     ├── list-tasks.sparql
     ├── list-creativeworks.sparql
     └── count-by-type.sparql
 ```
 
 ### Code Changes
-- **Added configuration loading functions** in `validate_pim.py`
+- **Added configuration loading functions** in `validate_pim.sh`
 - **Modified `merge_data_files()`** to use `config/domains.yaml`
 - **Modified `validate_shacl_shapes()`** to use `config/validation.yaml`
 - **Modified `test_sparql_queries()`** to load queries from external files
@@ -69,7 +69,7 @@ queries/
      description: "Metadata entries"
      required: false
    ```
-3. Run `python3 validate_pim.py` - the new domain is automatically included
+3. Run `util/validate_pim.sh` - the new domain is automatically included
 
 ### Adding SHACL Validation for a Domain
 1. Create your SHACL shape file in `shapes/` directory

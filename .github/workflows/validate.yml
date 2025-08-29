@@ -6,7 +6,7 @@ on:
     paths:
       - '**.ttl'
       - 'shapes/**'
-      - 'validate_pim.sh'
+      - 'util/validate_pim.sh'
       - '.github/workflows/validate.yml'
 #  push:
 #    branches: [ main ]
@@ -37,4 +37,4 @@ jobs:
         
     - name: Run SHACL validation
       run: |
-        nix-shell --run "sh validate_pim.sh"
+        nix-shell --run "sh util/validate_pim.sh"

@@ -7,7 +7,7 @@
 # 3. Data merging and SPARQL querying tests
 # 4. Performance timing for all operations
 #
-# Usage: ./validate_pim.sh [directory]
+# Usage: ./util/validate_pim.sh [directory]
 
 # Configuration
 DIRECTORY="${1:-.}"

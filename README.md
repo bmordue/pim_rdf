@@ -262,7 +262,7 @@ WHERE {
 ## Quick Start
 
 1. Install dependencies: `pip3 install rdflib pyshacl`
-2. Validate repository: `python3 validate_pim.py`
+2. Validate repository: `util/validate_pim.sh`
 3. For detailed developer instructions: See `.github/copilot-instructions.md`
 
 ## Continuous Integration
@@ -271,10 +271,10 @@ The repository includes a GitHub Actions workflow that automatically validates a
 
 - **Triggers**: Pull requests and pushes to main branch
 - **Validation includes**: TTL syntax checking, SHACL shapes validation, SPARQL query testing
-- **Files monitored**: `*.ttl`, `shapes/**`, `validate_pim.py`, workflow config
+- **Files monitored**: `*.ttl`, `shapes/**`, `util/validate_pim.sh`, workflow config
 - **Dependencies**: Automatically installs `rdflib` and `pyshacl`
 
-The CI pipeline runs the same `validate_pim.py` script used for local development, ensuring consistency between local and remote validation.
+The CI pipeline runs the same `util/validate_pim.sh` script used for local development, ensuring consistency between local and remote validation.
 
 ## License
 
