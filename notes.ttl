@@ -9,3 +9,9 @@
     dcterms:created "2025-08-18T14:00:00Z"^^xsd:dateTime ;
     schema:text "This is a test note in the RDF knowledge base." ;
     :hasTag :tag-knowledge .
+
+:note-test a schema:CreativeWork ;
+    dcterms:title "Test Note" ;
+    schema:text "This is a test note for validation" ;
+    dcterms:created "2025-08-18T15:00:00Z"^^xsd:dateTime ;
+    :hasTag :tag-test .

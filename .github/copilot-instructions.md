@@ -7,18 +7,26 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 ## Quick Start for New Developers
 
 **Essential first steps after cloning:**
-1. `pip3 install rdflib pyshacl` -- Install dependencies (~4 seconds)
-2. `util/validate_pim.sh` -- Validate entire repository (~270ms)
+1. `pip3 install rdflib pyshacl` -- Install dependencies (~3.6 seconds). NEVER CANCEL.
+2. `python3 util/validate_pim_python.py` -- Validate entire repository (~290ms). NEVER CANCEL.
 3. Explore the data: `python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); results=g.query('SELECT ?type (COUNT(?e) as ?count) WHERE { ?e a ?type } GROUP BY ?type'); [print(f'{str(row[0]).split(\"/\")[-1]}: {row[1]} entities') for row in results]"`
 
-**Repository contains 10 TTL files (~72 triples) modeling personal knowledge with RDF.**
+**Repository contains 9 TTL files (~68 triples, 44 when merged) modeling personal knowledge with RDF.**
 
 ## Working Effectively
 
 ### Essential Setup and Dependencies
-- Install Python 3.12+ and pip: `sudo apt-get update && sudo apt-get install -y python3 python3-pip`
-- Install required Python packages: `pip3 install rdflib pyshacl` -- takes 3-5 seconds. NEVER CANCEL.
-- The repository uses Python-based RDF tools instead of Apache Jena due to network limitations in CI environments.
+- Install Python 3.8+ and pip: `sudo apt-get update && sudo apt-get install -y python3 python3-pip` -- takes ~10 seconds. NEVER CANCEL.
+- Install required Python packages: `pip3 install rdflib pyshacl` -- takes 3.6 seconds. NEVER CANCEL.
+- The repository uses Python-based RDF tools for reliability in CI environments. Apache Jena tools require Nix environment.
+
+### Primary Validation Tool
+- **Python validation script:** `python3 util/validate_pim_python.py` -- comprehensive validation in 290ms
+  - Validates all TTL syntax (10ms for 9 files)
+  - Merges data files (9ms for 44 triples)
+  - Tests SPARQL queries (120ms total)
+  - Runs SHACL validation (3ms per shape)
+  - **ALWAYS USE THIS** for development validation
 
 ### Core Validation Workflow
 - **ALWAYS validate TTL syntax before making changes:**
@@ -30,16 +38,21 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
   print(f'Valid: {len(g)} triples')
   "
   ```
-- **Validation time: ~1ms per file. Total repository validation: ~10ms for 10 files.**
+- **Individual file validation time: ~0.12 seconds per file.**
 
 ### Building and Testing
-- **Validate all TTL files:** `util/validate_pim.sh` -- takes 500-600ms. NEVER CANCEL.
-- **Merge data files:** Creates `build/merged.ttl` with combined RDF graph (~40 triples) -- takes 6-10ms.
-- **SPARQL query testing:** Automated tests run 3 sample queries -- takes 100-300ms total.
-- **SHACL validation:** Tests data against shape constraints -- takes 0.6ms per validation.
+- **Validate all TTL files:** `python3 util/validate_pim_python.py` -- takes 290ms. NEVER CANCEL.
+- **Merge data files:** Creates `build/merged.ttl` with combined RDF graph (~44 triples) -- takes 9ms.
+- **SPARQL query testing:** Automated tests run 4 sample queries -- takes 120ms total.
+- **SHACL validation:** Tests data against shape constraints -- takes 3ms per validation.
+
+### Alternative Validation (Advanced)
+- **Shell script approach:** `util/validate_pim.sh` requires Apache Jena (`riot`, `shacl` commands)
+- **Nix environment:** `nix-shell --run "util/validate_pim.sh"` (only works with network access)
+- **CI pipeline:** Uses Nix environment in GitHub Actions
 
 ### Manual Testing and Validation
-- **ALWAYS run complete validation after making changes:** `util/validate_pim.sh`
+- **ALWAYS run complete validation after making changes:** `python3 util/validate_pim_python.py`
 - **Test specific TTL file syntax:** Use the Python validation snippet above for individual files.
 - **Test SPARQL queries manually:**
   ```python
@@ -63,6 +76,7 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
    results = g.query('SELECT ?type (COUNT(?e) as ?count) WHERE { ?e a ?type } GROUP BY ?type')
    for row in results: print(f'{row[0]}: {row[1]} entities')
    ```
+5. **End-to-end workflow test:** Takes ~240ms and validates add/validate/merge/query cycle
 
 ## Repository Structure
 
@@ -170,13 +184,28 @@ ORDER BY ASC(?priority)
 - **Full repository validation:** ~11ms for TTL syntax validation
 - **NEVER CANCEL:** All validations complete in under 1 second (total ~600ms)
 
-## Common Tasks
+## Common Developer Workflows
+
+### Daily Development Cycle
+1. **Before making changes:** `python3 util/validate_pim_python.py` (290ms)
+2. **Edit TTL files** using your preferred editor (VS Code recommended)
+3. **Quick syntax check:** `python3 -c "import rdflib; g=rdflib.Graph(); g.parse('filename.ttl', format='turtle'); print(f'Valid: {len(g)} triples')"`
+4. **Full validation:** `python3 util/validate_pim_python.py` (290ms)
+5. **Test queries on merged data:** `python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); # your SPARQL query here"`
+
+### Troubleshooting Workflow
+1. **Syntax error?** Check prefixes and TTL format using individual file validation
+2. **SHACL error?** Check shape constraints in `shapes/` directory
+3. **Query returns no results?** Verify entity types and merged data content
+4. **Import errors?** Re-run `pip3 install rdflib pyshacl`
+
+### Common Tasks
 
 ### Adding New Data
 1. **Edit appropriate TTL file** (tasks.ttl, notes.ttl, etc.)
 2. **Follow URI and vocabulary conventions** outlined above
 3. **Validate syntax:** Run Python validation snippet
-4. **Test complete workflow:** `util/validate_pim.sh`
+4. **Test complete workflow:** `python3 util/validate_pim_python.py`
 5. **Check merged output:** Verify `build/merged.ttl` updates correctly
 
 ### Debugging Validation Errors
@@ -185,11 +214,12 @@ ORDER BY ASC(?priority)
 - **Query failures:** Verify entity types and property names match vocabulary
 
 ### Performance Expectations
-- **TTL file parsing:** 0.5-3ms per file
-- **Data merging:** 5-6ms for full repository (~40 triples)
-- **SPARQL queries:** 3-300ms depending on complexity (simple queries ~3ms, first query ~300ms)
-- **SHACL validation:** 0.6ms per shape/data pair
-- **Complete validation workflow:** 250-600ms total (typically ~270ms)
+- **TTL file parsing:** 0.12 seconds per file (individual), 10ms total (all 9 files)
+- **Data merging:** 9ms for full repository (~44 triples merged from 8 data files)  
+- **SPARQL queries:** 98ms first query, 3-8ms subsequent queries (caching effect)
+- **SHACL validation:** 3ms per shape/data pair
+- **Complete validation workflow:** 290ms total for all steps (Python-based)
+- **End-to-end functional test:** 240ms for add/validate/merge/query cycle
 
 ## Validation Commands Reference
 
@@ -197,22 +227,28 @@ ORDER BY ASC(?priority)
 # Validate single TTL file
 python3 -c "import rdflib; g=rdflib.Graph(); g.parse('filename.ttl', format='turtle'); print(f'Valid: {len(g)} triples')"
 
-# Run complete validation suite
-util/validate_pim.sh
+# Run complete validation suite (Python - recommended)
+python3 util/validate_pim_python.py
+
+# Run complete validation suite (Shell - requires Nix/Apache Jena)
+util/validate_pim.sh  # Only works in nix-shell environment
 
 # Test SPARQL query
 python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); print(list(g.query('SELECT ?s WHERE { ?s a ?type } LIMIT 5')))"
 
 # SHACL validation
 python3 -c "import pyshacl, rdflib; d=rdflib.Graph(); d.parse('notes.ttl', format='turtle'); s=rdflib.Graph(); s.parse('shapes/notes-shapes.ttl', format='turtle'); print(pyshacl.validate(d, shacl_graph=s, inference='none')[0])"
+
+# Merge data files manually
+python3 -c "import rdflib,glob; g=rdflib.Graph(); [g.parse(f, format='turtle') for f in glob.glob('*.ttl') if not f.startswith('config') and not f.startswith('merged')]; g.serialize('build/merged.ttl', format='turtle'); print(f'Merged: {len(g)} triples')"
 ```
 
 ## Error Prevention
 - **Never use slashes in local names:** Use `task-001` not `task/001`
 - **Always include required prefixes:** Especially `xsd:` for datatypes
-- **Test syntax after every edit:** Use the validation snippet immediately
+- **Test syntax after every edit:** Use the validation snippet immediately  
 - **Use consistent vocabulary:** Follow the patterns in existing files
-- **Validate before committing:** Run `util/validate_pim.sh` always
+- **Validate before committing:** Run `python3 util/validate_pim_python.py` always
 
 ## Troubleshooting Common Issues
 
@@ -232,6 +268,8 @@ python3 -c "import pyshacl, rdflib; d=rdflib.Graph(); d.parse('notes.ttl', forma
 ### Environment Issues
 - **Import errors:** Re-run `pip3 install rdflib pyshacl` if modules not found
 - **File not found:** Ensure you're in repository root directory `/home/runner/work/pim_rdf/pim_rdf`
+- **Shell script fails:** Use `python3 util/validate_pim_python.py` instead if `riot` command not available
+- **Nix environment needed:** Use `nix-shell` for Apache Jena tools (network access required)
 
 ## Alternative Setup (Advanced)
 - **Nix environment:** `nix-shell` loads Apache Jena and Fuseki (if network allows)
@@ -241,4 +279,4 @@ python3 -c "import pyshacl, rdflib; d=rdflib.Graph(); d.parse('notes.ttl', forma
   - Advanced: `fuseki-server --config=config-pim.ttl` (uses repository configuration)
 - **Fuseki UI:** Available at http://localhost:3030/pim when server is running
 
-**Note:** Python-based tools are recommended for CI/network-constrained environments due to reliable installation. Apache Jena tools require network access and may not be available in all environments.
+**Note:** Python-based tools (`util/validate_pim_python.py`) are recommended for most development work due to reliable installation and consistent performance. Apache Jena tools require network access and Nix environment, but are used by the CI pipeline and provide additional capabilities for advanced users.
