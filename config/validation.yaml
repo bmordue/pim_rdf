@@ -1,0 +1,13 @@
+# SHACL validation mappings for PIM RDF project
+# This file defines which SHACL shape files validate which data files
+
+validation:
+  # Map data files to their corresponding SHACL shape files
+  - data_file: "data/notes.ttl"
+    shape_file: "notes-shapes.ttl"
+    description: "Validate notes against SHACL shapes"
+    
+  # Add more mappings as needed
+  # - data_file: "tasks.ttl"
+  #   shape_file: "tasks-shapes.ttl"
+  #   description: "Validate tasks against SHACL shapes"

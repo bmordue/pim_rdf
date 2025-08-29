@@ -1,0 +1,11 @@
+@prefix : <https://ben.example/pim/> .
+@prefix schema: <https://schema.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:note-001 a schema:CreativeWork ;
+    dcterms:title "First RDF note" ;
+    dcterms:creator :Ben ;
+    dcterms:created "2025-08-18T14:00:00Z"^^xsd:dateTime ;
+    schema:text "This is a test note in the RDF knowledge base." ;
+    :hasTag :tag-knowledge .

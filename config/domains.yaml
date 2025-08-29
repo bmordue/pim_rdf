@@ -1,0 +1,36 @@
+# Data domain definitions for PIM RDF project
+# This file defines which TTL files should be included in data merging
+
+domains:
+  # Core data files (exclude config and shapes)
+  - filename: "data/base.ttl"
+    description: "Core prefixes and personal metadata"
+    required: true
+    
+  - filename: "data/tasks.ttl"
+    description: "Task management data"
+    required: false
+    
+  - filename: "data/notes.ttl"
+    description: "Notes as schema:CreativeWork"
+    required: false
+    
+  - filename: "data/contacts.ttl"
+    description: "Contacts using FOAF vocabulary"
+    required: false
+    
+  - filename: "data/projects.ttl"
+    description: "Project definitions"
+    required: false
+    
+  - filename: "data/bookmarks.ttl"
+    description: "Bookmarks as schema:BookmarkAction"
+    required: false
+    
+  - filename: "data/events.ttl"
+    description: "Calendar events using iCal vocabulary"
+    required: false
+    
+  - filename: "data/tags.ttl"
+    description: "SKOS concept scheme for tags"
+    required: false

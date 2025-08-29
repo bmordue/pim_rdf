@@ -1,8 +1,0 @@
-@prefix : <https://ben.example/pim/> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-
-:note/001 a :Note ;
-    dcterms:title "First RDF note" ;
-    dcterms:creator :Ben ;
-    dcterms:description "This is a test note in the RDF knowledge base." ;
-    :hasTag :tag/knowledge .

@@ -73,6 +73,35 @@ build/
   merged.ttl            # generated: merged graph for serving/querying
 ```
 
+### Configuration-Driven Approach
+
+The project now uses configuration files to separate data definitions from application logic:
+
+- **`config/domains.yaml`**: Defines which TTL files should be included in data merging. Adding new domains just requires updating this file.
+- **`config/validation.yaml`**: Maps data files to their SHACL shape files for validation.
+- **`queries/validation/`**: External SPARQL query files used by the validation script.
+
+This approach allows extending the system without modifying Python code.
+
+**Updated project structure:**
+```text
+pim/
+  # ... existing TTL files ...
+  config/               # NEW: configuration-driven setup
+    domains.yaml        # defines which TTL files to merge
+    validation.yaml     # SHACL validation mappings
+  queries/              # UPDATED: organized by purpose
+    user/               # user-defined queries (moved from queries/)
+      dashboard.sparql
+      notes_tagged_rdf_last_30_days.sparql
+      open_tasks_by_priority.sparql
+    validation/         # NEW: queries used by validation script
+      list-tasks.sparql
+      list-creativeworks.sparql
+      count-by-type.sparql
+  # ... rest remains the same ...
+```
+
 ## URI conventions
 
 - Keep URIs stable and preferably opaque; avoid encoding titles into them.
@@ -90,14 +119,14 @@ build/
 2) Validation
 
 - Validate syntax during edits:
-  - Apache Jena: `riot --validate pim/tasks.ttl`
+  - Apache Jena: `riot --validate pim/data/tasks.ttl`
 - Validate shapes (example with Jena SHACL):
-  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/tasks.ttl`
+  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/data/tasks.ttl`
 
 3) Querying locally
 
 - Merge your domain files into one graph (optional but convenient):
-  - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
+  - `riot --output=TURTLE pim/data/*.ttl > build/merged.ttl`
 - Serve with Fuseki:
   - `fuseki-server --file=build/merged.ttl /pim`
   - Open SPARQL UI at http://localhost:3030/pim
@@ -238,6 +267,23 @@ WHERE {
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
+
+## Quick Start
+
+1. Install dependencies: `pip3 install rdflib pyshacl`
+2. Validate repository: `util/validate_pim.sh`
+3. For detailed developer instructions: See `.github/copilot-instructions.md`
+
+## Continuous Integration
+
+The repository includes a GitHub Actions workflow that automatically validates all changes:
+
+- **Triggers**: Pull requests and pushes to main branch
+- **Validation includes**: TTL syntax checking, SHACL shapes validation, SPARQL query testing
+- **Files monitored**: `*.ttl`, `shapes/**`, `util/validate_pim.sh`, workflow config
+- **Dependencies**: Automatically installs `rdflib` and `pyshacl`
+
+The CI pipeline runs the same `util/validate_pim.sh` script used for local development, ensuring consistency between local and remote validation.
 
 ## License
 

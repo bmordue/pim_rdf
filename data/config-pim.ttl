@@ -23,15 +23,14 @@
     ja:defaultGraph [
         rdf:type ja:MemoryModel ;
         ja:content [ ja:externalContent
-          # Load all your TTL files here
-          <file:/home/runner/work/pim_rdf/pim_rdf/base.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/tags.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/notes.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/tasks.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/projects.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/bookmarks.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/contacts.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/events.ttl> ,
-          <file:/home/runner/work/pim_rdf/pim_rdf/shapes/notes-shapes.ttl>
+          <file:base.ttl> ,
+          <file:bookmarks.ttl> ,
+          <file:contacts.ttl> ,
+          <file:events.ttl> ,
+          <file:notes.ttl> ,
+          <file:projects.ttl> ,
+          <file:../shapes/notes-shapes.ttl> ,
+          <file:tags.ttl> ,
+          <file:tasks.ttl>
         ]
     ] .

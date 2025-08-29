@@ -1,6 +1,0 @@
-@prefix : <https://ben.example/pim/> .
-
-:contact/001 a :Person ;
-    rdfs:label "Jane Doe" ;
-    :email "jane@example.com" ;
-    :hasTag :tag/knowledge .
