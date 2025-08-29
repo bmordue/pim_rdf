@@ -70,14 +70,15 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 ```
 pim_rdf/
 ├── README.md              # Main documentation
-├── base.ttl               # Core prefixes and personal metadata
-├── tasks.ttl              # Task management data
-├── notes.ttl              # Notes as schema:CreativeWork
-├── contacts.ttl           # Contacts using FOAF vocabulary
-├── projects.ttl           # Project definitions
-├── bookmarks.ttl          # Bookmarks as schema:BookmarkAction
-├── events.ttl             # Calendar events using iCal vocabulary
-├── tags.ttl               # SKOS concept scheme for tags
+├── data/                  # TTL data files
+│   ├── base.ttl           # Core prefixes and personal metadata
+│   ├── tasks.ttl          # Task management data
+│   ├── notes.ttl          # Notes as schema:CreativeWork
+│   ├── contacts.ttl       # Contacts using FOAF vocabulary
+│   ├── projects.ttl       # Project definitions
+│   ├── bookmarks.ttl      # Bookmarks as schema:BookmarkAction
+│   ├── events.ttl         # Calendar events using iCal vocabulary
+│   └── tags.ttl           # SKOS concept scheme for tags
 ├── shapes/                # SHACL validation shapes
 │   └── notes-shapes.ttl   # Shape constraints for notes
 ├── queries/               # Sample SPARQL queries

@@ -1,6 +1,21 @@
-# PIM RDF — A personal knowledge base powered by RDF/Turtle
-
-This repository is a blueprint for a personal knowledge base modeled in RDF and stored in plain-text Turtle (.ttl) files. It’s modular, Git-friendly, and queryable with SPARQL. Use it to connect notes, tasks, contacts, projects, bookmarks, events, and tags with stable URIs and common vocabularies.
+# PIM RDF — A personal knowledge base powered by RDF/Turt```text
+pim/
+  data/                 # TTL data files
+    base.ttl            # prefixes, base metadata about "you"
+    contacts.ttl
+    notes.ttl
+    tasks.ttl
+    projects.ttl
+    bookmarks.ttl
+    events.ttl
+    tags.ttl            # SKOS concept scheme for tags
+    provenance.ttl      # optional: data import/derivation notes
+  shapes/               # SHACL validation shapes
+    notes-shapes.ttl
+    tasks-shapes.ttl
+build/
+  merged.ttl            # generated: merged graph for serving/querying
+```ry is a blueprint for a personal knowledge base modeled in RDF and stored in plain-text Turtle (.ttl) files. It’s modular, Git-friendly, and queryable with SPARQL. Use it to connect notes, tasks, contacts, projects, bookmarks, events, and tags with stable URIs and common vocabularies.
 
 ## Key ideas
 
@@ -119,14 +134,14 @@ pim/
 2) Validation
 
 - Validate syntax during edits:
-  - Apache Jena: `riot --validate pim/tasks.ttl`
+  - Apache Jena: `riot --validate pim/data/tasks.ttl`
 - Validate shapes (example with Jena SHACL):
-  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/tasks.ttl`
+  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/data/tasks.ttl`
 
 3) Querying locally
 
 - Merge your domain files into one graph (optional but convenient):
-  - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
+  - `riot --output=TURTLE pim/data/*.ttl > build/merged.ttl`
 - Serve with Fuseki:
   - `fuseki-server --file=build/merged.ttl /pim`
   - Open SPARQL UI at http://localhost:3030/pim
