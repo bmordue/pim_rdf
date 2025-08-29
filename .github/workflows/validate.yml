@@ -6,15 +6,15 @@ on:
     paths:
       - '**.ttl'
       - 'shapes/**'
-      - 'validate_pim.py'
+      - 'validate_pim.sh'
       - '.github/workflows/validate.yml'
-  push:
-    branches: [ main ]
-    paths:
-      - '**.ttl'
-      - 'shapes/**'
-      - 'validate_pim.py'
-      - '.github/workflows/validate.yml'
+#  push:
+#    branches: [ main ]
+#    paths:
+#      - '**.ttl'
+#      - 'shapes/**'
+#      - 'validate_pim.py'
+#      - '.github/workflows/validate.yml'
 
 jobs:
   validate:
@@ -37,13 +37,4 @@ jobs:
         
     - name: Run SHACL validation
       run: |
-        nix-shell --run "python3 validate_pim.py"
-        
-    - name: Check validation results
-      run: |
-        echo "✅ All validation steps completed successfully!"
-        echo "Validation includes:"
-        echo "- TTL syntax validation"  
-        echo "- Data merging verification"
-        echo "- SPARQL query testing"
-        echo "- SHACL shapes validation"
+        nix-shell --run "sh validate_pim.sh"

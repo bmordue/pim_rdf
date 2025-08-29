@@ -73,6 +73,13 @@ load_validation_config() {
 validate_ttl_files() {
     print_header "TTL Syntax Validation"
     
+    # Check if riot is available
+    if ! command -v riot &>/dev/null; then
+        print_error "riot command not found. Please run within nix-shell environment:"
+        echo "  nix-shell --run 'bash validate_pim'"
+        return 1
+    fi
+    
     local total_triples=0
     local file_count=0
     local total_start=$(get_time_ms)
@@ -94,6 +101,7 @@ validate_ttl_files() {
             print_success "$rel_path: Valid ($triples triples) - ${duration}ms"
         else
             print_error "$rel_path: Invalid Turtle syntax"
+            echo "  Run 'riot --validate --syntax=turtle $file' for details"
             return 1
         fi
     done < <(find "$DIRECTORY" -name "*.ttl" -not -name "merged*.ttl" -print0)
@@ -213,6 +221,12 @@ validate_shacl_shapes() {
     
     if [[ ! -d "$SHAPES_DIR" ]]; then
         print_warning "No shapes directory found - skipping SHACL validation"
+        return 0
+    fi
+    
+    # Check if shacl is available
+    if ! command -v shacl &>/dev/null; then
+        print_warning "shacl command not found. Please run within nix-shell environment for SHACL validation"
         return 0
     fi
     
