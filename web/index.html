@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIM RDF Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>PIM RDF Dashboard</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+                <button class="nav-btn" data-view="tasks">Tasks</button>
+                <button class="nav-btn" data-view="notes">Notes</button>
+            </nav>
+        </header>
+
+        <main class="main">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Open Tasks</h3>
+                        <div class="stat-number" id="open-tasks-count">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Notes</h3>
+                        <div class="stat-number" id="notes-count">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Projects</h3>
+                        <div class="stat-number" id="projects-count">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Upcoming Events</h3>
+                        <div class="stat-number" id="events-count">-</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <section class="recent-tasks">
+                        <h2>Recent Open Tasks</h2>
+                        <div id="recent-tasks-list" class="item-list">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </section>
+
+                    <section class="recent-notes">
+                        <h2>Recent Notes</h2>
+                        <div id="recent-notes-list" class="item-list">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Tasks View -->
+            <div id="tasks-view" class="view">
+                <div class="view-header">
+                    <h2>Tasks</h2>
+                    <div class="filters">
+                        <select id="task-status-filter">
+                            <option value="">All Status</option>
+                            <option value="todo">Todo</option>
+                            <option value="doing">Doing</option>
+                            <option value="done">Done</option>
+                        </select>
+                        <select id="task-priority-filter">
+                            <option value="">All Priorities</option>
+                            <option value="1">High (1)</option>
+                            <option value="2">Medium (2)</option>
+                            <option value="3">Low (3)</option>
+                        </select>
+                        <select id="task-sort">
+                            <option value="priority">Sort by Priority</option>
+                            <option value="created">Sort by Created</option>
+                            <option value="title">Sort by Title</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="tasks-list" class="item-list">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Notes View -->
+            <div id="notes-view" class="view">
+                <div class="view-header">
+                    <h2>Notes</h2>
+                    <div class="filters">
+                        <input type="search" id="notes-search" placeholder="Search notes...">
+                        <select id="notes-sort">
+                            <option value="created">Sort by Created (newest)</option>
+                            <option value="created-asc">Sort by Created (oldest)</option>
+                            <option value="title">Sort by Title</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="notes-list" class="item-list">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="error-toast" class="toast error">
+        <div class="toast-content"></div>
+    </div>
+
+    <script src="sparql-client.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
