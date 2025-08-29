@@ -53,7 +53,7 @@ load_domains_config() {
         grep "filename:" "$config_file" | sed 's/.*filename: *//g' | tr -d '"' | tr -d "'"
     else
         print_warning "Using fallback hardcoded domain list"
-        echo -e "base.ttl\ntasks.ttl\nnotes.ttl\ncontacts.ttl\nprojects.ttl\nbookmarks.ttl\nevents.ttl\ntags.ttl"
+        echo -e "data/base.ttl\ndata/tasks.ttl\ndata/notes.ttl\ndata/contacts.ttl\ndata/projects.ttl\ndata/bookmarks.ttl\ndata/events.ttl\ndata/tags.ttl"
     fi
 }
 
@@ -65,7 +65,7 @@ load_validation_config() {
         awk '/- data_file:/{data=$3} /shape_file:/{print data ":" $2}' "$config_file" | tr -d '"' | tr -d "'"
     else
         print_warning "Using fallback hardcoded validation mapping"
-        echo "notes.ttl:notes-shapes.ttl"
+        echo "data/notes.ttl:notes-shapes.ttl"
     fi
 }
 

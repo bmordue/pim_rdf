@@ -119,14 +119,14 @@ pim/
 2) Validation
 
 - Validate syntax during edits:
-  - Apache Jena: `riot --validate pim/tasks.ttl`
+  - Apache Jena: `riot --validate pim/data/tasks.ttl`
 - Validate shapes (example with Jena SHACL):
-  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/tasks.ttl`
+  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/data/tasks.ttl`
 
 3) Querying locally
 
 - Merge your domain files into one graph (optional but convenient):
-  - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
+  - `riot --output=TURTLE pim/data/*.ttl > build/merged.ttl`
 - Serve with Fuseki:
   - `fuseki-server --file=build/merged.ttl /pim`
   - Open SPARQL UI at http://localhost:3030/pim

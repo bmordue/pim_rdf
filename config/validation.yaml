@@ -3,7 +3,7 @@
 
 validation:
   # Map data files to their corresponding SHACL shape files
-  - data_file: "notes.ttl"
+  - data_file: "data/notes.ttl"
     shape_file: "notes-shapes.ttl"
     description: "Validate notes against SHACL shapes"
     

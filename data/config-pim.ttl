@@ -23,14 +23,14 @@
     ja:defaultGraph [
         rdf:type ja:MemoryModel ;
         ja:content [ ja:externalContent
-          <file:/home/ben/Projects/pim_rdf/base.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/bookmarks.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/contacts.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/events.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/notes.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/projects.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/shapes/notes-shapes.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/tags.ttl> ,
-          <file:/home/ben/Projects/pim_rdf/tasks.ttl>
+          <file:base.ttl> ,
+          <file:bookmarks.ttl> ,
+          <file:contacts.ttl> ,
+          <file:events.ttl> ,
+          <file:notes.ttl> ,
+          <file:projects.ttl> ,
+          <file:../shapes/notes-shapes.ttl> ,
+          <file:tags.ttl> ,
+          <file:tasks.ttl>
         ]
     ] .
