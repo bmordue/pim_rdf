@@ -1,0 +1,18 @@
+@prefix : <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:contact-takeout-001 a foaf:Person ;
+    rdfs:label "John Smith" ;
+    dcterms:created "2025-08-29T20:33:24.378332"^^xsd:dateTime ;
+    dcterms:source "Google Takeout - Contacts" ;
+    foaf:mbox <mailto:john.smith@example.com> .
+
+:contact-takeout-002 a foaf:Person ;
+    rdfs:label "Alice Johnson" ;
+    dcterms:created "2025-08-29T20:33:24.378448"^^xsd:dateTime ;
+    dcterms:source "Google Takeout - Contacts" ;
+    foaf:mbox <mailto:alice@example.org> .
+

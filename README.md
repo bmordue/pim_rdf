@@ -251,6 +251,13 @@ WHERE {
 - Prefer `schema:` for content-oriented entities (notes as `schema:CreativeWork`, bookmarks as `schema:BookmarkAction`, etc.).
 - Keep dates as `xsd:dateTime` in UTC for consistent filtering.
 
+## Features
+
+- **Google Takeout Ingestion**: Import contacts, calendar events, and location history from Google Takeout archives. See [`docs/takeout-ingestion/USAGE.md`](docs/takeout-ingestion/USAGE.md) for details.
+- **Configuration-Driven Data Management**: Easily add new data domains via YAML configuration files.
+- **SHACL Validation**: Data quality assurance with shape constraints.
+- **SPARQL Querying**: Query your personal data using standard SPARQL.
+
 ## Roadmap (optional)
 
 - TriG named graphs for per-file graph boundaries.
@@ -258,12 +265,14 @@ WHERE {
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
+- **Google Takeout Expansion**: Gmail, Drive, Photos, Chrome bookmarks, Keep notes.
 
 ## Quick Start
 
 1. Install dependencies: `pip3 install rdflib pyshacl`
 2. Validate repository: `util/validate_pim.sh`
-3. For detailed developer instructions: See `.github/copilot-instructions.md`
+3. **NEW**: Import Google Takeout data: `python3 util/ingest_takeout.py /path/to/takeout.zip`
+4. For detailed developer instructions: See `.github/copilot-instructions.md`
 
 ## Continuous Integration
 
