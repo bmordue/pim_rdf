@@ -14,8 +14,9 @@ pkgs.mkShell {
     # Python RDF libraries
     (python3.withPackages (ps: with ps; [ rdflib ]))
 
-    gemini-cli
-    claude-code
+    # unfree, can't run in CI as is
+#    gemini-cli
+#    claude-code
   ];
 
   shellHook = ''
