@@ -73,6 +73,35 @@ build/
   merged.ttl            # generated: merged graph for serving/querying
 ```
 
+### Configuration-Driven Approach
+
+The project now uses configuration files to separate data definitions from application logic:
+
+- **`config/domains.yaml`**: Defines which TTL files should be included in data merging. Adding new domains just requires updating this file.
+- **`config/validation.yaml`**: Maps data files to their SHACL shape files for validation.
+- **`queries/validation/`**: External SPARQL query files used by the validation script.
+
+This approach allows extending the system without modifying Python code.
+
+**Updated project structure:**
+```text
+pim/
+  # ... existing TTL files ...
+  config/               # NEW: configuration-driven setup
+    domains.yaml        # defines which TTL files to merge
+    validation.yaml     # SHACL validation mappings
+  queries/              # UPDATED: organized by purpose
+    user/               # user-defined queries (moved from queries/)
+      dashboard.sparql
+      notes_tagged_rdf_last_30_days.sparql
+      open_tasks_by_priority.sparql
+    validation/         # NEW: queries used by validation script
+      list-tasks.sparql
+      list-creativeworks.sparql
+      count-by-type.sparql
+  # ... rest remains the same ...
+```
+
 ## URI conventions
 
 - Keep URIs stable and preferably opaque; avoid encoding titles into them.
@@ -233,7 +262,7 @@ WHERE {
 ## Quick Start
 
 1. Install dependencies: `pip3 install rdflib pyshacl`
-2. Validate repository: `python3 validate_pim.py`
+2. Validate repository: `util/validate_pim.sh`
 3. For detailed developer instructions: See `.github/copilot-instructions.md`
 
 ## Continuous Integration
@@ -242,10 +271,10 @@ The repository includes a GitHub Actions workflow that automatically validates a
 
 - **Triggers**: Pull requests and pushes to main branch
 - **Validation includes**: TTL syntax checking, SHACL shapes validation, SPARQL query testing
-- **Files monitored**: `*.ttl`, `shapes/**`, `validate_pim.py`, workflow config
+- **Files monitored**: `*.ttl`, `shapes/**`, `util/validate_pim.sh`, workflow config
 - **Dependencies**: Automatically installs `rdflib` and `pyshacl`
 
-The CI pipeline runs the same `validate_pim.py` script used for local development, ensuring consistency between local and remote validation.
+The CI pipeline runs the same `util/validate_pim.sh` script used for local development, ensuring consistency between local and remote validation.
 
 ## License
 

@@ -23,15 +23,14 @@
     ja:defaultGraph [
         rdf:type ja:MemoryModel ;
         ja:content [ ja:externalContent
-          # Load all your TTL files here
-          <file:/absolute/path/to/pim_rdf_kb/base.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/tags.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/notes.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/tasks.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/projects.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/bookmarks.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/contacts.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/events.ttl> ,
-          <file:/absolute/path/to/pim_rdf_kb/shapes/notes-shapes.ttl>
+          <file:/home/ben/Projects/pim_rdf/base.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/bookmarks.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/contacts.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/events.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/notes.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/projects.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/shapes/notes-shapes.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/tags.ttl> ,
+          <file:/home/ben/Projects/pim_rdf/tasks.ttl>
         ]
     ] .
