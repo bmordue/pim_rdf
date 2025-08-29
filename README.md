@@ -1,21 +1,6 @@
-# PIM RDF — A personal knowledge base powered by RDF/Turt```text
-pim/
-  data/                 # TTL data files
-    base.ttl            # prefixes, base metadata about "you"
-    contacts.ttl
-    notes.ttl
-    tasks.ttl
-    projects.ttl
-    bookmarks.ttl
-    events.ttl
-    tags.ttl            # SKOS concept scheme for tags
-    provenance.ttl      # optional: data import/derivation notes
-  shapes/               # SHACL validation shapes
-    notes-shapes.ttl
-    tasks-shapes.ttl
-build/
-  merged.ttl            # generated: merged graph for serving/querying
-```ry is a blueprint for a personal knowledge base modeled in RDF and stored in plain-text Turtle (.ttl) files. It’s modular, Git-friendly, and queryable with SPARQL. Use it to connect notes, tasks, contacts, projects, bookmarks, events, and tags with stable URIs and common vocabularies.
+# PIM RDF — A personal knowledge base powered by RDF/Turtle
+
+This repository is a blueprint for a personal knowledge base modeled in RDF and stored in plain-text Turtle (.ttl) files. It’s modular, Git-friendly, and queryable with SPARQL. Use it to connect notes, tasks, contacts, projects, bookmarks, events, and tags with stable URIs and common vocabularies.
 
 ## Key ideas
 
