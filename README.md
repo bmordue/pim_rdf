@@ -136,6 +136,31 @@ pim/
 - Use Git commits as your change history.
 - Record imports/batch edits in `pim/provenance.ttl` using `prov:wasDerivedFrom`, `prov:generatedAtTime`, etc.
 
+## Running SPARQL queries locally
+
+A small helper script is provided to run SPARQL queries from the `queries/` directory against the merged Turtle file `build/merged.ttl`.
+
+Usage:
+
+- Run the default query (open tasks by priority):
+
+  ./util/run_query.py
+
+- Run a specific query file:
+
+  ./util/run_query.py queries/user/dashboard.sparql
+
+- Specify a different data file:
+
+  ./util/run_query.py queries/user/dashboard.sparql -d build/merged.ttl
+
+Requirements:
+
+- Python 3.12+
+- rdflib: install with `pip3 install rdflib`
+
+The script prints tab-separated results with a header row when available and exits with a non-zero code on error.
+
 ## Examples
 
 ### A task
