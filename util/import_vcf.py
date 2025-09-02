@@ -150,7 +150,9 @@ def convert_contacts_to_rdf(contacts):
         if 'TEL' in contact_data:
             phones = contact_data['TEL'] if isinstance(contact_data['TEL'], list) else [contact_data['TEL']]
             for phone in phones:
-                g.add((contact_uri, FOAF.phone, URIRef(f"tel:{phone}")))
+                # Normalize phone number for valid URI (remove spaces and non-digits except + and -)
+                normalized_phone = re.sub(r'[^\d+\-]', '', phone)
+                g.add((contact_uri, FOAF.phone, URIRef(f"tel:{normalized_phone}")))
         
         # Add organization
         if 'ORG' in contact_data:
@@ -162,7 +164,14 @@ def convert_contacts_to_rdf(contacts):
         
         # Add website
         if 'URL' in contact_data:
-            g.add((contact_uri, FOAF.homepage, URIRef(contact_data['URL'])))
+            url = contact_data['URL']
+            # Clean up URL - unescape and validate
+            url = url.replace('\\:', ':').replace('\\\\', '\\')
+            if url and (url.startswith('http://') or url.startswith('https://')):
+                try:
+                    g.add((contact_uri, FOAF.homepage, URIRef(url)))
+                except Exception as e:
+                    print(f"Warning: Skipping invalid URL '{url}': {e}")
         
         # Add notes
         if 'NOTE' in contact_data:
