@@ -243,7 +243,7 @@ class CalendarConverter:
                         
                         self.graph.add((event_uri, ICAL.dtstart, 
                                        Literal(iso_dt, datatype=XSD.dateTime)))
-            except:
+            except (ValueError, IndexError):
                 pass  # Skip invalid dates
         
         if 'location' in event:
