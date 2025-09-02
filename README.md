@@ -230,6 +230,20 @@ For detailed setup instructions, see `web/README.md`.
   dcterms:description "Content audit, design tweaks, deploy automation." .
 ```
 
+### An event
+
+```turtle
+@prefix :        <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+:event-001 a :Event ;
+  dcterms:title "RDF Workshop" ;
+  :date "2025-09-15"^^xsd:date ;
+  :location "London" ;
+  :hasTag :tag-knowledge .
+```
+
 ### A note (schema.org CreativeWork)
 
 ```turtle
@@ -312,6 +326,28 @@ WHERE {
 - Prefer `schema:` for content-oriented entities (notes as `schema:CreativeWork`, bookmarks as `schema:BookmarkAction`, etc.).
 - Keep dates as `xsd:dateTime` in UTC for consistent filtering.
 
+## ICS Calendar Export
+
+Generate standard iCalendar (.ics) files from your RDF event data for use with calendar applications:
+
+```bash
+# Generate ICS from events.ttl
+python3 ics_bridge.py events.ttl -o my_calendar.ics
+
+# Or pipe to stdout
+python3 ics_bridge.py events.ttl > my_calendar.ics
+
+# View help
+python3 ics_bridge.py --help
+```
+
+The script automatically maps RDF event properties to ICS format:
+- `dcterms:title` → `SUMMARY`
+- `:date` → `DTSTART`
+- `:location` → `LOCATION`
+- `:hasTag` → `DESCRIPTION` (as "Tags: ...")
+
+## Roadmap (optional)
 ## Task Model Vocabulary Evaluation
 
 **Status: ✅ COMPLETED** - See [TASK_MODEL_EVALUATION.md](TASK_MODEL_EVALUATION.md) for comprehensive analysis.
@@ -342,8 +378,6 @@ See `examples/` directory for:
 - TriG named graphs for per-file graph boundaries.
 - Text search via Jena Text index for note bodies.
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
-- ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
-- **Google Takeout Expansion**: Gmail, Drive, Photos, Chrome bookmarks, Keep notes.
 
 ## Data Import Tools
 

@@ -3,8 +3,21 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+
 :event-001 a ical:Vevent ;
     dcterms:title "RDF Workshop" ;
-    ical:dtstart "2025-09-15T09:00:00Z"^^xsd:dateTime ;
+    ical:dtstart "2025-09-15"^^xsd:date ;
     ical:location "London" ;
     :hasTag :tag-knowledge .
+
+:event-002 a ical:Vevent ;
+    dcterms:title "Team Meeting" ;
+    ical:dtstart "2025-08-20T14:30:00Z"^^xsd:dateTime ;
+    ical:location "Office Conference Room" ;
+    :hasTag :tag-work .
+
+:event-003 a ical:Vevent ;
+    dcterms:title "Birthday Party" ;
+    ical:dtstart "2025-10-05"^^xsd:date ;
+    ical:location "Home" ;
+    :hasTag :tag-personal .
