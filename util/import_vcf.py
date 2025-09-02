@@ -72,6 +72,7 @@ def generate_contact_uri(base_namespace, contact_data, existing_uris, counter):
     Generate a stable, unique URI for a contact.
     
     Uses name-based approach when possible, falls back to counter-based.
+    Returns tuple of (uri, updated_counter).
     """
     # Try to create a URI based on the contact's name
     if 'FN' in contact_data:
@@ -84,7 +85,7 @@ def generate_contact_uri(base_namespace, contact_data, existing_uris, counter):
         # Ensure uniqueness
         if uri_candidate not in existing_uris:
             existing_uris.add(uri_candidate)
-            return base_namespace[uri_candidate]
+            return base_namespace[uri_candidate], counter
     
     # Fall back to counter-based URI
     uri_candidate = f"contact-{counter:03d}"
@@ -93,7 +94,7 @@ def generate_contact_uri(base_namespace, contact_data, existing_uris, counter):
         uri_candidate = f"contact-{counter:03d}"
     
     existing_uris.add(uri_candidate)
-    return base_namespace[uri_candidate]
+    return base_namespace[uri_candidate], counter
 
 
 def convert_contacts_to_rdf(contacts):
@@ -103,23 +104,23 @@ def convert_contacts_to_rdf(contacts):
     # Create RDF graph
     g = Graph()
     
-    # Define namespaces
+    # Define namespaces according to PIM RDF guidelines
     base_ns = Namespace("https://ben.example/pim/")
     pim_ns = Namespace("https://ben.example/ns/pim#")
     
-    # Bind prefixes for cleaner output
-    g.bind("", base_ns)
+    # Bind prefixes for cleaner output following PIM RDF conventions
+    g.bind("", base_ns)  # Base namespace as default prefix
     g.bind("foaf", FOAF)
     g.bind("rdfs", RDFS)
-    g.bind("pim", pim_ns)
+    g.bind("pim", pim_ns)  # Custom vocabulary namespace
     g.bind("xsd", XSD)
     
     existing_uris = set()
     counter = 1
-    
     for contact_data in contacts:
         # Generate unique URI for this contact
-        contact_uri = generate_contact_uri(base_ns, contact_data, existing_uris, counter)
+        contact_uri, counter = generate_contact_uri(base_ns, contact_data, existing_uris, counter)
+        counter += 1
         counter += 1
         
         # Add basic type
