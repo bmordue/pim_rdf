@@ -136,6 +136,29 @@ pim/
 - Use Git commits as your change history.
 - Record imports/batch edits in `pim/provenance.ttl` using `prov:wasDerivedFrom`, `prov:generatedAtTime`, etc.
 
+## Interactive Web Dashboard
+
+An interactive web dashboard is available in the `web/` directory for viewing and filtering your personal data:
+
+### Features
+- **Unified Dashboard View**: Overview of tasks, notes, projects, and events with key statistics
+- **Dynamic Filtering**: Filter tasks by status and priority, search notes by content
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Real-time Updates**: Connects to live SPARQL endpoint when available
+
+### Quick Start
+1. Start Fuseki server: `fuseki-server --config=data/config-pim.ttl`
+2. Open `web/index.html` in browser or serve with: `cd web && python3 -m http.server 8080`
+3. Dashboard will connect to SPARQL endpoint at http://localhost:3030/pim/query
+4. Falls back to demo data if SPARQL endpoint is unavailable
+
+### Screenshots
+- **Dashboard Overview**: ![Dashboard](https://github.com/user-attachments/assets/fd4874e5-23ee-42f5-bd57-fb66f8279290)
+- **Task Management**: ![Tasks View](https://github.com/user-attachments/assets/b0ced0cd-d366-45b8-946f-e4ee5025d4d7)  
+- **Mobile Responsive**: ![Mobile View](https://github.com/user-attachments/assets/66a75343-48b1-495e-8ea9-c96396e3a480)
+
+For detailed setup instructions, see `web/README.md`.
+
 ## Examples
 
 ### A task
