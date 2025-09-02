@@ -136,6 +136,31 @@ pim/
 - Use Git commits as your change history.
 - Record imports/batch edits in `pim/provenance.ttl` using `prov:wasDerivedFrom`, `prov:generatedAtTime`, etc.
 
+## Running SPARQL queries locally
+
+A small helper script is provided to run SPARQL queries from the `queries/` directory against the merged Turtle file `build/merged.ttl`.
+
+Usage:
+
+- Run the default query (open tasks by priority):
+
+  ./util/run_query.py
+
+- Run a specific query file:
+
+  ./util/run_query.py queries/user/dashboard.sparql
+
+- Specify a different data file:
+
+  ./util/run_query.py queries/user/dashboard.sparql -d build/merged.ttl
+
+Requirements:
+
+- Python 3.12+
+- rdflib: install with `pip3 install rdflib`
+
+The script prints tab-separated results with a header row when available and exits with a non-zero code on error.
+
 ## Interactive Web Dashboard
 
 An interactive web dashboard is available in the `web/` directory for viewing and filtering your personal data:
@@ -274,6 +299,13 @@ WHERE {
 - Prefer `schema:` for content-oriented entities (notes as `schema:CreativeWork`, bookmarks as `schema:BookmarkAction`, etc.).
 - Keep dates as `xsd:dateTime` in UTC for consistent filtering.
 
+## Features
+
+- **Google Takeout Ingestion**: Import contacts, calendar events, and location history from Google Takeout archives. See [`docs/takeout-ingestion/USAGE.md`](docs/takeout-ingestion/USAGE.md) for details.
+- **Configuration-Driven Data Management**: Easily add new data domains via YAML configuration files.
+- **SHACL Validation**: Data quality assurance with shape constraints.
+- **SPARQL Querying**: Query your personal data using standard SPARQL.
+
 ## Roadmap (optional)
 
 - TriG named graphs for per-file graph boundaries.
@@ -281,12 +313,14 @@ WHERE {
 - Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
+- **Google Takeout Expansion**: Gmail, Drive, Photos, Chrome bookmarks, Keep notes.
 
 ## Quick Start
 
 1. Install dependencies: `pip3 install rdflib pyshacl`
 2. Validate repository: `util/validate_pim.sh`
-3. For detailed developer instructions: See `.github/copilot-instructions.md`
+3. **NEW**: Import Google Takeout data: `python3 util/ingest_takeout.py /path/to/takeout.zip`
+4. For detailed developer instructions: See `.github/copilot-instructions.md`
 
 ## Continuous Integration
 

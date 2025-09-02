@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # PIM RDF Validation Script (Shell version)
 #
 # This script provides comprehensive validation for the PIM RDF knowledge base:

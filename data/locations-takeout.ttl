@@ -1,0 +1,22 @@
+@prefix : <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix geo1: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix pim: <https://ben.example/ns/pim#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:place-takeout-001 a pim:Place ;
+    dcterms:created "2025-08-29T20:33:24.381179"^^xsd:dateTime ;
+    dcterms:source "Google Takeout - Location History" ;
+    geo1:lat "51.48749"^^xsd:float ;
+    geo1:long "-0.0114161"^^xsd:float ;
+    pim:locationName "London Eye" ;
+    pim:visitedOn "2022-01-01T00:00:00+00:00"^^xsd:dateTime .
+
+:place-takeout-002 a pim:Place ;
+    dcterms:created "2025-08-29T20:33:24.381319"^^xsd:dateTime ;
+    dcterms:source "Google Takeout - Location History" ;
+    geo1:lat "48.85844"^^xsd:float ;
+    geo1:long "2.2945"^^xsd:float ;
+    pim:locationName "Eiffel Tower" ;
+    pim:visitedOn "2022-01-02T00:00:00+00:00"^^xsd:dateTime .
+
