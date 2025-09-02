@@ -1,0 +1,19 @@
+@prefix : <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ical: <http://www.w3.org/2002/12/cal/ical#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:event-takeout-001 a ical:Vevent ;
+    dcterms:created "2025-08-29T20:33:24.379975"^^xsd:dateTime ;
+    dcterms:source "Google Takeout - Calendar" ;
+    dcterms:title "Team Meeting" ;
+    ical:dtstart "2025-09-15T10:00:00+00:00"^^xsd:dateTime ;
+    ical:location "Conference Room A" .
+
+:event-takeout-002 a ical:Vevent ;
+    dcterms:created "2025-08-29T20:33:24.380090"^^xsd:dateTime ;
+    dcterms:source "Google Takeout - Calendar" ;
+    dcterms:title "RDF Workshop" ;
+    ical:dtstart "2025-09-20T14:00:00+00:00"^^xsd:dateTime ;
+    ical:location "London" .
+
