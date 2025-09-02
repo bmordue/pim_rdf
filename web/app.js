@@ -226,6 +226,8 @@ class RDFBrowser {
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
             PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
             PREFIX schema: <https://schema.org/>
+            PREFIX dcterms: <http://purl.org/dc/terms/>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
             SELECT ?uri ?title ?label ?email ?phone ?description
             WHERE {
