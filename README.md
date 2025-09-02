@@ -34,6 +34,10 @@ This repository is a blueprint for a personal knowledge base modeled in RDF and 
 
 A minimal vocabulary to cover gaps. You can evolve or replace parts of this with schema.org or ActivityStreams 2.0 as needed.
 
+> **📋 Task Model Update**: Based on vocabulary evaluation (see [TASK_MODEL_EVALUATION.md](TASK_MODEL_EVALUATION.md)), 
+> **schema.org Action** is recommended over the custom `pim:Task` model for improved interoperability. 
+> See `examples/` for migration examples and updated queries.
+
 ```turtle
 @prefix pim: <https://ben.example/ns/pim#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -73,6 +77,35 @@ build/
   merged.ttl            # generated: merged graph for serving/querying
 ```
 
+### Configuration-Driven Approach
+
+The project now uses configuration files to separate data definitions from application logic:
+
+- **`config/domains.yaml`**: Defines which TTL files should be included in data merging. Adding new domains just requires updating this file.
+- **`config/validation.yaml`**: Maps data files to their SHACL shape files for validation.
+- **`queries/validation/`**: External SPARQL query files used by the validation script.
+
+This approach allows extending the system without modifying Python code.
+
+**Updated project structure:**
+```text
+pim/
+  # ... existing TTL files ...
+  config/               # NEW: configuration-driven setup
+    domains.yaml        # defines which TTL files to merge
+    validation.yaml     # SHACL validation mappings
+  queries/              # UPDATED: organized by purpose
+    user/               # user-defined queries (moved from queries/)
+      dashboard.sparql
+      notes_tagged_rdf_last_30_days.sparql
+      open_tasks_by_priority.sparql
+    validation/         # NEW: queries used by validation script
+      list-tasks.sparql
+      list-creativeworks.sparql
+      count-by-type.sparql
+  # ... rest remains the same ...
+```
+
 ## URI conventions
 
 - Keep URIs stable and preferably opaque; avoid encoding titles into them.
@@ -90,22 +123,79 @@ build/
 2) Validation
 
 - Validate syntax during edits:
-  - Apache Jena: `riot --validate pim/tasks.ttl`
+  - Apache Jena: `riot --validate pim/data/tasks.ttl`
 - Validate shapes (example with Jena SHACL):
-  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/tasks.ttl`
+  - `shacl validate --shapes pim/shapes/tasks-shapes.ttl --data pim/data/tasks.ttl`
 
 3) Querying locally
 
 - Merge your domain files into one graph (optional but convenient):
-  - `riot --output=TURTLE pim/*.ttl > build/merged.ttl`
+  - `riot --output=TURTLE pim/data/*.ttl > build/merged.ttl`
 - Serve with Fuseki:
   - `fuseki-server --file=build/merged.ttl /pim`
   - Open SPARQL UI at http://localhost:3030/pim
 
-4) Versioning and provenance
+4) Web interface
+
+- A simple web interface is available in the `web/` directory for browsing your data:
+  - Start Fuseki as above
+  - Serve the web interface: `cd web && python3 -m http.server 8080`
+  - Open http://localhost:8080 for a user-friendly data browser
+  - See `web/README.md` for detailed setup instructions
+  - Quick start with sample data: `./start_web_interface.sh --mock`
+
+5) Versioning and provenance
 
 - Use Git commits as your change history.
 - Record imports/batch edits in `pim/provenance.ttl` using `prov:wasDerivedFrom`, `prov:generatedAtTime`, etc.
+
+## Running SPARQL queries locally
+
+A small helper script is provided to run SPARQL queries from the `queries/` directory against the merged Turtle file `build/merged.ttl`.
+
+Usage:
+
+- Run the default query (open tasks by priority):
+
+  ./util/run_query.py
+
+- Run a specific query file:
+
+  ./util/run_query.py queries/user/dashboard.sparql
+
+- Specify a different data file:
+
+  ./util/run_query.py queries/user/dashboard.sparql -d build/merged.ttl
+
+Requirements:
+
+- Python 3.12+
+- rdflib: install with `pip3 install rdflib`
+
+The script prints tab-separated results with a header row when available and exits with a non-zero code on error.
+
+## Interactive Web Dashboard
+
+An interactive web dashboard is available in the `web/` directory for viewing and filtering your personal data:
+
+### Features
+- **Unified Dashboard View**: Overview of tasks, notes, projects, and events with key statistics
+- **Dynamic Filtering**: Filter tasks by status and priority, search notes by content
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Real-time Updates**: Connects to live SPARQL endpoint when available
+
+### Quick Start
+1. Start Fuseki server: `fuseki-server --config=data/config-pim.ttl`
+2. Open `web/index.html` in browser or serve with: `cd web && python3 -m http.server 8080`
+3. Dashboard will connect to SPARQL endpoint at http://localhost:3030/pim/query
+4. Falls back to demo data if SPARQL endpoint is unavailable
+
+### Screenshots
+- **Dashboard Overview**: ![Dashboard](https://github.com/user-attachments/assets/fd4874e5-23ee-42f5-bd57-fb66f8279290)
+- **Task Management**: ![Tasks View](https://github.com/user-attachments/assets/b0ced0cd-d366-45b8-946f-e4ee5025d4d7)  
+- **Mobile Responsive**: ![Mobile View](https://github.com/user-attachments/assets/66a75343-48b1-495e-8ea9-c96396e3a480)
+
+For detailed setup instructions, see `web/README.md`.
 
 ## Examples
 
@@ -138,6 +228,20 @@ build/
   a pim:Project ;
   dcterms:title "Personal website refresh" ;
   dcterms:description "Content audit, design tweaks, deploy automation." .
+```
+
+### An event
+
+```turtle
+@prefix :        <https://ben.example/pim/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+:event-001 a :Event ;
+  dcterms:title "RDF Workshop" ;
+  :date "2025-09-15"^^xsd:date ;
+  :location "London" ;
+  :hasTag :tag-knowledge .
 ```
 
 ### A note (schema.org CreativeWork)
@@ -274,15 +378,101 @@ python3 -m http.server 8000 --directory html_export
 # Or simply open html_export/index.html in your browser
 ```
 
-## Roadmap (optional)
+## ICS Calendar Export
+
+Generate standard iCalendar (.ics) files from your RDF event data for use with calendar applications:
+
+```bash
+# Generate ICS from events.ttl
+python3 ics_bridge.py events.ttl -o my_calendar.ics
+
+# Or pipe to stdout
+python3 ics_bridge.py events.ttl > my_calendar.ics
+
+# View help
+python3 ics_bridge.py --help
+```
+
+The script automatically maps RDF event properties to ICS format:
+- `dcterms:title` → `SUMMARY`
+- `:date` → `DTSTART`
+- `:location` → `LOCATION`
+- `:hasTag` → `DESCRIPTION` (as "Tags: ...")
+
+## Task Model Vocabulary Evaluation
+
+**Status: ✅ COMPLETED** - See [TASK_MODEL_EVALUATION.md](TASK_MODEL_EVALUATION.md) for comprehensive analysis.
+
+**Recommendation**: Migrate to **schema.org Action** vocabulary for improved interoperability and semantic richness.
+
+### Key Findings
+- **schema.org Action** provides optimal balance of compatibility, expressiveness, and ecosystem support
+- **ActivityStreams 2.0** less suitable for personal task management use cases
+- Migration path: Hybrid approach allowing gradual transition while preserving custom PIM properties
+
+### Migration Examples
+See `examples/` directory for:
+- Current vs. migrated task examples
+- Updated SPARQL queries
+- Enhanced SHACL validation shapes
+- Hybrid approach for gradual migration
+
+## Features
+
+- **Google Takeout Ingestion**: Import contacts, calendar events, and location history from Google Takeout archives. See [`docs/takeout-ingestion/USAGE.md`](docs/takeout-ingestion/USAGE.md) for details.
+- **Configuration-Driven Data Management**: Easily add new data domains via YAML configuration files.
+- **SHACL Validation**: Data quality assurance with shape constraints.
+- **SPARQL Querying**: Query your personal data using standard SPARQL.
+
+## Roadmap
 
 - TriG named graphs for per-file graph boundaries.
 - Text search via Jena Text index for note bodies.
-- ✅ **Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.**
-- ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
-- Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
+- Exports: generate static HTML (RDF → SPARQL → HTML) or JSON-LD snapshots.
 
-## License
+## Data Import Tools
 
-No license specified yet. Consider adding a LICENSE file (e.g., MIT, Apache-2.0) to clarify usage.
+### VCF Contact Import
 
+Import contacts from VCF (vCard) files into your PIM RDF knowledge base:
+
+```bash
+# Import contacts from a VCF file
+python3 util/import_vcf.py contacts.vcf data/imported-contacts.ttl
+
+# Review the generated RDF
+cat data/imported-contacts.ttl
+
+# Validate the imported data
+util/validate_pim.sh
+```
+
+**Supported vCard fields:**
+- `FN` (Full Name) → `foaf:name`, `rdfs:label`
+- `N` (Structured Name) → `foaf:givenName`, `foaf:familyName`  
+- `EMAIL` → `foaf:mbox` (supports multiple emails)
+- `TEL` → `foaf:phone` (supports multiple phones)
+- `ORG` (Organization) → `pim:organization`
+- `TITLE` (Job Title) → `pim:title`
+- `URL` (Website) → `foaf:homepage`
+- `NOTE` → `rdfs:comment`
+
+The script generates stable URIs based on contact names (e.g., `:contact-john-smith`) and uses standard FOAF vocabulary for compatibility.
+
+## Quick Start
+
+1. Install dependencies: `pip3 install rdflib pyshacl`
+2. Validate repository: `util/validate_pim.sh`
+3. **NEW**: Import Google Takeout data: `python3 util/ingest_takeout.py /path/to/takeout.zip`
+4. For detailed developer instructions: See `.github/copilot-instructions.md`
+
+## Continuous Integration
+
+The repository includes a GitHub Actions workflow that automatically validates all changes:
+
+- **Triggers**: Pull requests and pushes to main branch
+- **Validation includes**: TTL syntax checking, SHACL shapes validation, SPARQL query testing
+- **Files monitored**: `*.ttl`, `shapes/**`, `util/validate_pim.sh`, workflow config
+- **Dependencies**: Automatically installs `rdflib` and `pyshacl`
+
+The CI pipeline runs the same `util/validate_pim.sh` script used for local development, ensuring consistency between local and remote validation.
