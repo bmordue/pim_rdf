@@ -3,26 +3,23 @@ build/
 
 # Python cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 .Python
 *.so
+*$py.class
 
 # Temporary files
-*.tmp
-*.temp
-.DS_Store
-Thumbs.db
+*~
 
 # IDE files
 .vscode/
 .idea/
-*.swp
-*.swo
 
 # Logs
 *.log
+
+# Test output
+test_output/
 
 # Web server temp files
 web/*.tmp
