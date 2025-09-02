@@ -1,0 +1,108 @@
+# Updated SPARQL Queries for Schema.org Action
+
+PREFIX :        <https://ben.example/pim/>
+PREFIX schema:  <https://schema.org/>
+PREFIX pim:     <https://ben.example/ns/pim#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+# Query 1: List open tasks ordered by priority (schema.org version)
+SELECT ?task ?title ?status ?priority
+WHERE {
+  ?task a schema:Action ;
+        schema:name ?title ;
+        schema:actionStatus ?status ;
+        pim:priority ?priority .
+  FILTER(?status != schema:CompletedActionStatus)
+}
+ORDER BY ASC(?priority) ?title
+
+# Query 2: Tasks for a specific project (schema.org version)
+SELECT ?task ?title ?status ?agent
+WHERE {
+  ?task a schema:Action ;
+        schema:name ?title ;
+        schema:actionStatus ?status ;
+        schema:agent ?agent ;
+        schema:isPartOf :project-2025-07-website .
+}
+
+# Query 3: Tasks by agent/assignee
+SELECT ?task ?title ?status ?duration
+WHERE {
+  ?task a schema:Action ;
+        schema:name ?title ;
+        schema:actionStatus ?status ;
+        schema:agent :Ben ;
+        schema:duration ?duration .
+}
+ORDER BY ?status ?title
+
+# Query 4: Active tasks with time estimates
+SELECT ?task ?title ?agent ?duration ?startTime
+WHERE {
+  ?task a schema:Action ;
+        schema:name ?title ;
+        schema:agent ?agent ;
+        schema:actionStatus schema:ActiveActionStatus ;
+        schema:duration ?duration .
+  OPTIONAL { ?task schema:startTime ?startTime }
+}
+ORDER BY ?startTime
+
+# Query 5: Completed tasks with results
+SELECT ?task ?title ?result ?endTime
+WHERE {
+  ?task a schema:Action ;
+        schema:name ?title ;
+        schema:actionStatus schema:CompletedActionStatus ;
+        schema:endTime ?endTime .
+  OPTIONAL { ?task schema:result ?result }
+}
+ORDER BY DESC(?endTime)
+
+# Query 6: Tasks blocked by prerequisites
+SELECT ?task ?title ?prerequisite ?prereqTitle
+WHERE {
+  ?task a schema:Action ;
+        schema:name ?title ;
+        schema:prerequisite ?prerequisite .
+  ?prerequisite schema:name ?prereqTitle ;
+               schema:actionStatus ?prereqStatus .
+  FILTER(?prereqStatus != schema:CompletedActionStatus)
+}
+
+# Query 7: Inbox tasks (hybrid query supporting both models)
+SELECT ?task ?title ?status ?priority
+WHERE {
+  {
+    # Schema.org Action tasks
+    ?task a schema:Action ;
+          schema:name ?title ;
+          schema:actionStatus ?status ;
+          pim:priority ?priority ;
+          pim:inbox true .
+  }
+  UNION
+  {
+    # Legacy PIM tasks
+    ?task a pim:Task ;
+          dcterms:title ?title ;
+          pim:status ?status ;
+          pim:priority ?priority ;
+          pim:inbox true .
+  }
+}
+ORDER BY ASC(?priority)
+
+# Query 8: Task duration analysis
+SELECT ?project (COUNT(?task) AS ?taskCount) (AVG(?durationHours) AS ?avgDuration)
+WHERE {
+  ?task a schema:Action ;
+        schema:isPartOf ?project ;
+        schema:duration ?duration .
+  
+  # Convert duration to hours for analysis
+  BIND(xsd:decimal(SUBSTR(STR(?duration), 3, STRLEN(STR(?duration))-4)) AS ?durationHours)
+}
+GROUP BY ?project
+ORDER BY DESC(?avgDuration)

@@ -1,25 +1,25 @@
-# Build artifacts and temporary files
+# Build artifacts
 build/
-*.ics
-*.tmp
 
-# Python
+# Python cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 .Python
 *.so
+*$py.class
+
+# Temporary files
+*~
+
+# IDE files
+.vscode/
+.idea/
 
 # Logs
 *.log
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Test output
+test_output/
 
-# OS
-.DS_Store
-Thumbs.db
+# Web server temp files
+web/*.tmp

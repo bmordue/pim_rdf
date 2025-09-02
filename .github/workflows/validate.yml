@@ -6,15 +6,15 @@ on:
     paths:
       - '**.ttl'
       - 'shapes/**'
-      - 'validate_pim.py'
+      - 'util/validate_pim.sh'
       - '.github/workflows/validate.yml'
-  push:
-    branches: [ main ]
-    paths:
-      - '**.ttl'
-      - 'shapes/**'
-      - 'validate_pim.py'
-      - '.github/workflows/validate.yml'
+#  push:
+#    branches: [ main ]
+#    paths:
+#      - '**.ttl'
+#      - 'shapes/**'
+#      - 'validate_pim.py'
+#      - '.github/workflows/validate.yml'
 
 jobs:
   validate:
@@ -24,25 +24,17 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
       with:
-        python-version: '3.12'
+        nix_path: nixpkgs=channel:nixos-unstable
         
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install rdflib pyshacl
+    - name: Setup Nix cache
+      uses: cachix/cachix-action@v12
+      with:
+        name: nixpkgs-unfree
+        skipPush: true
         
     - name: Run SHACL validation
       run: |
-        python3 validate_pim.py
-        
-    - name: Check validation results
-      run: |
-        echo "✅ All validation steps completed successfully!"
-        echo "Validation includes:"
-        echo "- TTL syntax validation"  
-        echo "- Data merging verification"
-        echo "- SPARQL query testing"
-        echo "- SHACL shapes validation"
+        nix-shell --run "sh util/validate_pim.sh"

@@ -8,7 +8,7 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 
 **Essential first steps after cloning:**
 1. `pip3 install rdflib pyshacl` -- Install dependencies (~4 seconds)
-2. `python3 validate_pim.py` -- Validate entire repository (~270ms)
+2. `util/validate_pim.sh` -- Validate entire repository (~270ms)
 3. Explore the data: `python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); results=g.query('SELECT ?type (COUNT(?e) as ?count) WHERE { ?e a ?type } GROUP BY ?type'); [print(f'{str(row[0]).split(\"/\")[-1]}: {row[1]} entities') for row in results]"`
 
 **Repository contains 10 TTL files (~72 triples) modeling personal knowledge with RDF.**
@@ -33,13 +33,13 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 - **Validation time: ~1ms per file. Total repository validation: ~10ms for 10 files.**
 
 ### Building and Testing
-- **Validate all TTL files:** `python3 validate_pim.py` -- takes 500-600ms. NEVER CANCEL.
+- **Validate all TTL files:** `util/validate_pim.sh` -- takes 500-600ms. NEVER CANCEL.
 - **Merge data files:** Creates `build/merged.ttl` with combined RDF graph (~40 triples) -- takes 6-10ms.
 - **SPARQL query testing:** Automated tests run 3 sample queries -- takes 100-300ms total.
 - **SHACL validation:** Tests data against shape constraints -- takes 0.6ms per validation.
 
 ### Manual Testing and Validation
-- **ALWAYS run complete validation after making changes:** `python3 validate_pim.py`
+- **ALWAYS run complete validation after making changes:** `util/validate_pim.sh`
 - **Test specific TTL file syntax:** Use the Python validation snippet above for individual files.
 - **Test SPARQL queries manually:**
   ```python
@@ -70,14 +70,15 @@ This repository contains a personal knowledge base modeled in RDF using Turtle (
 ```
 pim_rdf/
 ├── README.md              # Main documentation
-├── base.ttl               # Core prefixes and personal metadata
-├── tasks.ttl              # Task management data
-├── notes.ttl              # Notes as schema:CreativeWork
-├── contacts.ttl           # Contacts using FOAF vocabulary
-├── projects.ttl           # Project definitions
-├── bookmarks.ttl          # Bookmarks as schema:BookmarkAction
-├── events.ttl             # Calendar events using iCal vocabulary
-├── tags.ttl               # SKOS concept scheme for tags
+├── data/                  # TTL data files
+│   ├── base.ttl           # Core prefixes and personal metadata
+│   ├── tasks.ttl          # Task management data
+│   ├── notes.ttl          # Notes as schema:CreativeWork
+│   ├── contacts.ttl       # Contacts using FOAF vocabulary
+│   ├── projects.ttl       # Project definitions
+│   ├── bookmarks.ttl      # Bookmarks as schema:BookmarkAction
+│   ├── events.ttl         # Calendar events using iCal vocabulary
+│   └── tags.ttl           # SKOS concept scheme for tags
 ├── shapes/                # SHACL validation shapes
 │   └── notes-shapes.ttl   # Shape constraints for notes
 ├── queries/               # Sample SPARQL queries
@@ -176,7 +177,7 @@ ORDER BY ASC(?priority)
 1. **Edit appropriate TTL file** (tasks.ttl, notes.ttl, etc.)
 2. **Follow URI and vocabulary conventions** outlined above
 3. **Validate syntax:** Run Python validation snippet
-4. **Test complete workflow:** `python3 validate_pim.py`
+4. **Test complete workflow:** `util/validate_pim.sh`
 5. **Check merged output:** Verify `build/merged.ttl` updates correctly
 
 ### Debugging Validation Errors
@@ -198,7 +199,7 @@ ORDER BY ASC(?priority)
 python3 -c "import rdflib; g=rdflib.Graph(); g.parse('filename.ttl', format='turtle'); print(f'Valid: {len(g)} triples')"
 
 # Run complete validation suite
-python3 validate_pim.py
+util/validate_pim.sh
 
 # Test SPARQL query
 python3 -c "import rdflib; g=rdflib.Graph(); g.parse('build/merged.ttl', format='turtle'); print(list(g.query('SELECT ?s WHERE { ?s a ?type } LIMIT 5')))"
@@ -212,7 +213,7 @@ python3 -c "import pyshacl, rdflib; d=rdflib.Graph(); d.parse('notes.ttl', forma
 - **Always include required prefixes:** Especially `xsd:` for datatypes
 - **Test syntax after every edit:** Use the validation snippet immediately
 - **Use consistent vocabulary:** Follow the patterns in existing files
-- **Validate before committing:** Run `python3 validate_pim.py` always
+- **Validate before committing:** Run `util/validate_pim.sh` always
 
 ## Troubleshooting Common Issues
 

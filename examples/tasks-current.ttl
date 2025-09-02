@@ -1,0 +1,48 @@
+# Current PIM Task Model Examples
+
+@prefix :       <https://ben.example/pim/> .
+@prefix pim:    <https://ben.example/ns/pim#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+# Example 1: Simple todo task
+:task-2025-08-15-001
+  a pim:Task ;
+  dcterms:title "Review RDF vocabulary options" ;
+  dcterms:created "2025-08-15T09:00:00Z"^^xsd:dateTime ;
+  pim:status "todo" ;
+  pim:priority 3 ;
+  pim:inbox true .
+
+# Example 2: Project task with dependencies
+:task-2025-08-15-002
+  a pim:Task ;
+  dcterms:title "Implement schema.org migration" ;
+  dcterms:created "2025-08-15T09:30:00Z"^^xsd:dateTime ;
+  pim:status "doing" ;
+  pim:priority 1 ;
+  pim:estimate "PT4H"^^xsd:duration ;
+  pim:project :project-2025-07-website ;
+  pim:blockedBy :task-2025-08-15-001 ;
+  pim:inbox false .
+
+# Example 3: Completed task
+:task-2025-08-14-003
+  a pim:Task ;
+  dcterms:title "Research ActivityStreams 2.0" ;
+  dcterms:created "2025-08-14T15:00:00Z"^^xsd:dateTime ;
+  dcterms:modified "2025-08-15T10:00:00Z"^^xsd:dateTime ;
+  pim:status "done" ;
+  pim:priority 2 ;
+  pim:project :project-2025-07-website ;
+  pim:inbox false .
+
+# Example 4: High priority urgent task
+:task-2025-08-15-004
+  a pim:Task ;
+  dcterms:title "Fix critical RDF parsing bug" ;
+  dcterms:created "2025-08-15T11:00:00Z"^^xsd:dateTime ;
+  pim:status "todo" ;
+  pim:priority 0 ;  # Highest priority
+  pim:estimate "PT30M"^^xsd:duration ;
+  pim:inbox true .
