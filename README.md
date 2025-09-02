@@ -282,6 +282,35 @@ WHERE {
 - ICS bridge: generate `.ics` from `events.ttl` for calendar interoperability.
 - Evaluate mapping/replacing custom task model with schema.org `Action` or ActivityStreams 2.0.
 
+## Data Import Tools
+
+### VCF Contact Import
+
+Import contacts from VCF (vCard) files into your PIM RDF knowledge base:
+
+```bash
+# Import contacts from a VCF file
+python3 util/import_vcf.py contacts.vcf data/imported-contacts.ttl
+
+# Review the generated RDF
+cat data/imported-contacts.ttl
+
+# Validate the imported data
+util/validate_pim.sh
+```
+
+**Supported vCard fields:**
+- `FN` (Full Name) → `foaf:name`, `rdfs:label`
+- `N` (Structured Name) → `foaf:givenName`, `foaf:familyName`  
+- `EMAIL` → `foaf:mbox` (supports multiple emails)
+- `TEL` → `foaf:phone` (supports multiple phones)
+- `ORG` (Organization) → `pim:organization`
+- `TITLE` (Job Title) → `pim:title`
+- `URL` (Website) → `foaf:homepage`
+- `NOTE` → `rdfs:comment`
+
+The script generates stable URIs based on contact names (e.g., `:contact-john-smith`) and uses standard FOAF vocabulary for compatibility.
+
 ## Quick Start
 
 1. Install dependencies: `pip3 install rdflib pyshacl`
