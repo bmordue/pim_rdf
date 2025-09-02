@@ -135,7 +135,16 @@ pim/
   - `fuseki-server --file=build/merged.ttl /pim`
   - Open SPARQL UI at http://localhost:3030/pim
 
-4) Versioning and provenance
+4) Web interface
+
+- A simple web interface is available in the `web/` directory for browsing your data:
+  - Start Fuseki as above
+  - Serve the web interface: `cd web && python3 -m http.server 8080`
+  - Open http://localhost:8080 for a user-friendly data browser
+  - See `web/README.md` for detailed setup instructions
+  - Quick start with sample data: `./start_web_interface.sh --mock`
+
+5) Versioning and provenance
 
 - Use Git commits as your change history.
 - Record imports/batch edits in `pim/provenance.ttl` using `prov:wasDerivedFrom`, `prov:generatedAtTime`, etc.
