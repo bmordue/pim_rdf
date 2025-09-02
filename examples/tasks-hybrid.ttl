@@ -1,0 +1,63 @@
+# Hybrid Approach: Both Custom PIM and Schema.org
+
+@prefix :       <https://ben.example/pim/> .
+@prefix schema: <https://schema.org/> .
+@prefix pim:    <https://ben.example/ns/pim#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+# Example 1: Dual-typed task (gradual migration)
+:task-2025-08-15-001
+  a pim:Task, schema:Action ;  # Both types for compatibility
+  dcterms:title "Review RDF vocabulary options" ;
+  schema:name "Review RDF vocabulary options" ;
+  pim:status "todo" ;
+  schema:actionStatus schema:PotentialActionStatus ;
+  pim:priority 3 ;
+  pim:inbox true ;
+  schema:agent :Ben ;
+  dcterms:created "2025-08-15T09:00:00Z"^^xsd:dateTime .
+
+# Example 2: Progressive enhancement
+:task-2025-08-15-002
+  a pim:Task, schema:Action ;
+  dcterms:title "Implement schema.org migration" ;
+  schema:name "Implement schema.org migration" ;
+  schema:description "Enhance task with richer schema.org semantics" ;
+  pim:status "doing" ;
+  schema:actionStatus schema:ActiveActionStatus ;
+  pim:priority 1 ;
+  pim:estimate "PT4H"^^xsd:duration ;
+  schema:duration "PT4H"^^xsd:duration ;  # Duplicate for compatibility
+  pim:project :project-2025-07-website ;
+  schema:isPartOf :project-2025-07-website ;
+  pim:blockedBy :task-2025-08-15-001 ;
+  schema:prerequisite :task-2025-08-15-001 ;
+  pim:inbox false ;
+  schema:agent :Ben ;
+  dcterms:created "2025-08-15T09:30:00Z"^^xsd:dateTime .
+
+# Example 3: Schema.org focused with custom extensions
+:task-2025-08-15-003
+  a schema:Action ;
+  schema:name "Document migration strategy" ;
+  schema:description "Create comprehensive documentation for vocabulary migration" ;
+  schema:actionStatus schema:ActiveActionStatus ;
+  schema:agent :Ben ;
+  schema:isPartOf :project-2025-07-website ;
+  schema:duration "PT2H"^^xsd:duration ;
+  dcterms:created "2025-08-15T13:00:00Z"^^xsd:dateTime ;
+  # Retain essential PIM properties
+  pim:priority 2 ;
+  pim:inbox false .
+
+# Example 4: Legacy task (minimal changes)
+:task-2025-08-15-004
+  a pim:Task ;  # Keep original type for now
+  dcterms:title "Maintain backward compatibility" ;
+  pim:status "todo" ;
+  pim:priority 3 ;
+  pim:inbox true ;
+  dcterms:created "2025-08-15T14:00:00Z"^^xsd:dateTime ;
+  # Add schema.org properties gradually
+  schema:agent :Ben .
