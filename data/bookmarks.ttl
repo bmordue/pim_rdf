@@ -1,0 +1,9 @@
+@prefix : <https://ben.example/pim/> .
+@prefix schema: <https://schema.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+:bookmark-001 a schema:BookmarkAction ;
+    dcterms:title "Apache Jena Fuseki" ;
+    schema:target <https://jena.apache.org/documentation/fuseki2/> ;
+    dcterms:description "SPARQL server documentation" ;
+    :hasTag :tag-knowledge .

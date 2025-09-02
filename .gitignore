@@ -1,0 +1,25 @@
+# Build artifacts
+build/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.Python
+*.so
+*$py.class
+
+# Temporary files
+*~
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Test output
+test_output/
+
+# Web server temp files
+web/*.tmp
