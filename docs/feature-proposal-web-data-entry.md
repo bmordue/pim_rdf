@@ -86,7 +86,7 @@ A new API endpoint, e.g., `POST /api/add`, will be created to handle form submis
 
 -   **File Locking:** To prevent data corruption from concurrent writes, the backend must implement a file locking mechanism when opening a `.ttl` file for appending.
 -   **Configuration-driven:** The backend should use `config/domains.yaml` to determine the correct file path for a given entity type.
--   **Post-write Validation:** After appending the data, the server could trigger the `util/validate_pim.sh` script to ensure the new data is valid. If validation fails, the change should be rolled back or flagged for review.
+-   **Pre-write Validation:** Before appending data, the server should validate the generated triples. This can be done by creating a temporary in-memory graph with the new data and running SHACL validation. The data is only appended to the `.ttl` file if validation passes, preventing data corruption and avoiding complex rollback logic.
 
 ## 4. Implementation Plan
 
