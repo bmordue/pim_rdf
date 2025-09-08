@@ -47,6 +47,6 @@ The native-format approach (also known as "polyglot persistence") advocates for 
 - **Discoverability:** It can be harder to get a holistic view of the data when it is spread across many different files and formats.
 
 ### Real-World Parallels
-- **Datasette:** This project exemplifies the native-format approach. It takes data in common formats like CSV and JSON (often by converting them to SQLite), and instantly makes them explorable and publishable via a web interface and API. It is designed to work with data *as it is*.
+- **Datasette:** This project exemplifies a native-format approach. Its ecosystem includes tools to convert data from common formats like CSV and JSON into SQLite databases, which can then be instantly explored and published via a web interface and API. While a conversion step is often needed, it focuses on using a general-purpose, file-based database rather than a specialized graph model.
 - **Personal Wikis:** A personal wiki is a collection of documents (often Markdown) that are linked together. This is a form of native-format PIM, where the primary data type is the text document.
 - **KDE PIM (Kontact):** While presented as a unified suite, KDE PIM is composed of several applications, each managing its own data store. This is a form of native-format management at the application level, though the user sees an integrated whole.

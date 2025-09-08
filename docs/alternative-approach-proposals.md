@@ -1,6 +1,6 @@
 # Proposals for a Native-Format PIM Approach
 
-This document outlines three concrete proposals for implementing a personal information management (PIM) system based on the "native-format" architecture, where data is kept in its original format and processed with specialized tools.
+This document outlines three concrete proposals for implementing a personal information management (PIM) system based on the "native-format" architecture, where data is kept in its original format—or a general-purpose one like SQLite—and processed with specialized tools.
 
 ## Proposal 1: The Datasette Ecosystem
 
