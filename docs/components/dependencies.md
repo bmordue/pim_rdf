@@ -18,7 +18,7 @@ graph LR
     subgraph "Core Scripts & Tools"
         direction TB
         Validate["util/validate_pim.sh"]
-        Ingest["Ingestion Scripts\n(ingest_takeout, import_vcf)"]
+        Ingest["Ingestion Scripts\n(ingest_takeout.py, import_vcf.py)"]
         Export["export.py"]
         ICSBridge["ics_bridge.py"]
         RunQuery["util/run_query.py"]
