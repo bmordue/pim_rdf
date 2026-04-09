@@ -8,8 +8,8 @@ import tempfile
 import sys
 from pathlib import Path
 
-# Add the util directory to the path so we can import the ingestion module
-sys.path.append(str(Path(__file__).parent / 'util'))
+# Add the current directory to the path so we can import the ingestion module
+sys.path.append(str(Path(__file__).parent))
 
 try:
     from ingest_takeout import LocationConverter
@@ -123,7 +123,7 @@ try:
         # Output the RDF for inspection
         print("\nGenerated RDF (first 50 lines):")
         print("=" * 50)
-        turtle_output = graph.serialize(format='turtle')
+        turtle_output = graph.serialize(format='turtle', encoding='utf-8').decode('utf-8')
         lines = turtle_output.split('\n')
         for line in lines[:50]:
             print(line)
